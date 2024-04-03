@@ -12,6 +12,7 @@ The course has:
 Contents:
 - [Introduction to Microservices](#introduction-to-microservices)
 - [Hotel booking system](#hotel-booking-system)
+- [Identity and Access Management (IAM) AWS Cognito](#identity-and-access-management-iam-aws-cognito)
 
 ## Introduction to Microservices
 
@@ -54,3 +55,46 @@ Microservices:
   - payment microservice (we won't integrate with any payment service)
   - booking microservice + DB
   - admin microservice 
+
+---
+
+## Identity and Access Management (IAM) AWS Cognito
+
+### Intro to AWS Cognito
+- user identity and access management 
+- provides user identity, user authentication via email or Federated Access (fb or google)
+- users can have attributes (ie names and address), groups and other attributes
+- users can be created manually by an admin or via a sign-up page 
+- AWS cognito provides built-in signup and login page for web apps 
+- AWS cognito based on Open Authentication (OAuth)
+
+### Setting up AWS Cofnito for Hotel Booking System
+- go to cognito in AWS => "create user pool"
+  - various options here
+  - using cognito domain and the cognito generated UI: https://hotel-booking-serivce.auth.ap-southeast-2.amazoncognito.com
+  - for 'allowed callback urls' make sure we don't run our website as a file. i.e. file://user/local etc => need to setup a web server, i.e. IIS / apache tomcat 
+    - this is the URL to redirect the user back to after authentication. i.e. https://localhost:8080/hotel
+  - in the 'OpenId Connect Scopes' (in 'advanced app client settings') we need OpenId and Email
+  - add sign-out URL (the same i.e. https://localhost:8080/hotel)
+  - once created we need 'user pool id' (at the top) and the client id (in 'App integration' section)
+  - we also need a user to administer other uers
+    - in users tab, create user 
+    - we've got 3 users: admins, customers, and managers. any user not part of a group we assume are customers
+  - do make our user an admin, we to go groups and create group:
+    - create 'Admin' group as well as 'HotelManager' group
+
+### Sign in with AWS Cognito 
+- to integrate with a front end app, in aws in the cognito user pool click 'getting started' then 'integrate your user pool with an app': https://docs.aws.amazon.com/cognito/latest/developerguide/cognito-integrate-apps.html
+- Amplify works with react: https://docs.aws.amazon.com/cognito/latest/developerguide/cognito-integrate-apps.html#cognito-integrate-apps-amplify
+- gives you boilerplate JS 
+- instead we'll use very basic JS that the course guy provides => add my details to the cognito.js file 
+  - back in the amazon cognito area in AWS, click into the 'App integration' tab then the 'app client name' then edit hosted UI. change the OAuth 2.0 Grant types to 'Implicit grant' as well.
+- then he goes to the html page (in my case its doing the file thing just opening index.html) - so need to use IIS for windows. 
+  - just used chatgpt to figure that out, its now on http://localhost:6060/hotel => make sure this is the same in the Cognito UI (i had https://localhost:8080/hotel and it didn't work)
+
+
+### Creating hotels 
+- sign in as an admin user (the one we made earlier)
+- 'add hotel' button now visible
+- click it and you see a basic form, in addHotel.html. this doesn't have an action yet - we need the API for it first. note the encryption type.  (enctype)
+- 
