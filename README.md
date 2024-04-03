@@ -13,6 +13,7 @@ Contents:
 - [Introduction to Microservices](#introduction-to-microservices)
 - [Hotel booking system](#hotel-booking-system)
 - [Identity and Access Management (IAM) AWS Cognito](#identity-and-access-management-iam-aws-cognito)
+- [API Gateway Pattern and Tools](#api-gateway-pattern-and-tools)
 
 ## Introduction to Microservices
 
@@ -97,4 +98,7 @@ Microservices:
 - sign in as an admin user (the one we made earlier)
 - 'add hotel' button now visible
 - click it and you see a basic form, in addHotel.html. this doesn't have an action yet - we need the API for it first. note the encryption type.  (enctype)
-- 
+
+---
+
+## API Gateway Pattern and Tools
