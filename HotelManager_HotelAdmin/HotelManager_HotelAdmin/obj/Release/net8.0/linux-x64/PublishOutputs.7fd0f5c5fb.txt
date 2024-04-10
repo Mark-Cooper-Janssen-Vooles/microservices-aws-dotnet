@@ -1,0 +1,7 @@
+C:\dev\01_learnings\microservices-aws-dotnet\HotelManager_HotelAdmin\HotelManager_HotelAdmin\bin\Release\net8.0\publish\HotelManager_HotelAdmin.dll
+C:\dev\01_learnings\microservices-aws-dotnet\HotelManager_HotelAdmin\HotelManager_HotelAdmin\bin\Release\net8.0\publish\HotelManager_HotelAdmin.deps.json
+C:\dev\01_learnings\microservices-aws-dotnet\HotelManager_HotelAdmin\HotelManager_HotelAdmin\bin\Release\net8.0\publish\HotelManager_HotelAdmin.runtimeconfig.json
+C:\dev\01_learnings\microservices-aws-dotnet\HotelManager_HotelAdmin\HotelManager_HotelAdmin\bin\Release\net8.0\publish\HotelManager_HotelAdmin.pdb
+C:\dev\01_learnings\microservices-aws-dotnet\HotelManager_HotelAdmin\HotelManager_HotelAdmin\bin\Release\net8.0\publish\Amazon.Lambda.APIGatewayEvents.dll
+C:\dev\01_learnings\microservices-aws-dotnet\HotelManager_HotelAdmin\HotelManager_HotelAdmin\bin\Release\net8.0\publish\Amazon.Lambda.Core.dll
+C:\dev\01_learnings\microservices-aws-dotnet\HotelManager_HotelAdmin\HotelManager_HotelAdmin\bin\Release\net8.0\publish\Amazon.Lambda.Serialization.SystemTextJson.dll

@@ -153,3 +153,57 @@ common api gateway tools:
 ---
 
 ## Building Serverless Microservices 
+
+### The concept of a microservice Chassis :: Servelress & Containerisation 
+- every microservice has a "service template build logic" and "cross cutting concerns" (i.e. security, external config, logging / monitoring, health check, tracing)
+- we want to take out all cross-cutting concerns and leave them to an external entity: the chassis
+  - a microservice chassis is the foundation for developing microservices and performing cross-cutting tasks 
+  - if we look at an example of an "order service":
+    - service specific build logic
+    - service-specific cross-cutting concerns
+    - application logic
+    - template build logic 
+    - template cross-cutting concerns
+  - we can see it can use some DRY template, anything that is common goes to the "Service Chassis" or the "Service Template" 
+- the types of Chassis tells us what kinds of service we can create 
+
+Types of microservices (Chassis and templates)  
+- Serverless
+  - specific to cloud envs
+  - AWS provides the chassis 
+  - scaling-out based on usage and is done fully controlled by AWS 
+  - fully integrated into other AWS services (IAM, CloudWatch, etc)
+  - we do not have access to the execution environment 
+  - dev languages / frameworks based on AWS offering only
+- Containerized 
+  - app and its operating system packaged into one image, i.e. a docker image
+  - must be deployed to a container orchestration playform, i.e. kubernetes
+  - access to execution environment, i.e. via ssh 
+  - no limitation for development languages or technologies 
+  - can support complex deployment scenarios effectively, i.e. blue/green deployment
+- Other Chasis types:
+  - spring boot / micronaut / quarkus (java)
+  - express.js (node.js)
+  - flask (python)
+- in AWS:
+  - AWS lambda is the microservice framework (including chassis and template) for creating serverless microservices
+  - AWS supports kubernetes (as a managed service) and has its own containerisation platform called ECS (elastic container services) for container-based microservices 
+
+### Creating and deploying an AWS Lambda microservice 
+- to start with, we need to know the payload: what our hotel form is pushing to API gateway. check this in the network tab on the browser. 
+- in AWS Lambda service in the console, we see we can use .net 8.0 
+- need to create the lambda: in rider, create new project and choose 'class library' - all lambdas are class libraries 
+- using nuget add `amazon.lambda.core` as well as `amazon.lambda.apigatewayevents`, `amazon.lambda.serialization.systemtext.json`
+- add the response headers, and the assembly for the lambda serialisers. its in the "HotelManager_HotelAdmn/HotelAdmin.cs" file 
+- to package this and send to AWS, use this terminal command: `dotnet tool install -g Amazon.Lambda.Tools`
+  - go to where csproj file is, then use `dotnet lambda package HotelManager_HotelAdmin.csproj -o HotelAdmin.zip`
+  - creates a file 'HotelAdmin.zip'
+
+- now we want to upload our zip file to AWS 
+- go to create the lambda in the AWS UI, add the name and use runtime .net 8
+- in the code tab, upload .zip file from earlier
+- we then need to change the handler in the runtime settings - this is the endpoint where AWS looks to access the code.
+  - for .net it works like this: `<Assembly name>::<namespace name>.<class name>::<method name>`
+  - i.e. ours will be "HotelMAnager_HotelAdmin::HotelManager_HotelAdmin.HotelAdmin::AddHotel"
+- we can then go to the test tab and press test, and see that its working
+- we can also go to the 'monitor' tab to see the cloudwatch logs 

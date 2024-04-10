@@ -1,0 +1,12 @@
+{
+  "version": 2,
+  "dgSpecHash": "8HMBdWRN5/Xy1ofAQTfNF1ESvdaZYholPZneQ1KnR80N2mHI+5AWNIs1Ew9gUy+OKlwgzSH3Jo6CQEbkOoGY+w==",
+  "success": true,
+  "projectFilePath": "C:\\dev\\01_learnings\\microservices-aws-dotnet\\HotelManager_HotelAdmin\\HotelManager_HotelAdmin\\HotelManager_HotelAdmin.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\mark.janssen-vooles\\.nuget\\packages\\amazon.lambda.apigatewayevents\\2.7.0\\amazon.lambda.apigatewayevents.2.7.0.nupkg.sha512",
+    "C:\\Users\\mark.janssen-vooles\\.nuget\\packages\\amazon.lambda.core\\2.2.0\\amazon.lambda.core.2.2.0.nupkg.sha512",
+    "C:\\Users\\mark.janssen-vooles\\.nuget\\packages\\amazon.lambda.serialization.systemtextjson\\2.4.2\\amazon.lambda.serialization.systemtextjson.2.4.2.nupkg.sha512"
+  ],
+  "logs": []
+}
