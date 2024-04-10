@@ -13,7 +13,11 @@ Contents:
 - [Introduction to Microservices](#introduction-to-microservices)
 - [Hotel booking system](#hotel-booking-system)
 - [Identity and Access Management (IAM) AWS Cognito](#identity-and-access-management-iam-aws-cognito)
-- [API Gateway Pattern and Tools](#api-gateway-pattern-and-tools)
+- [API Gateway](#api-gateway)
+  - pattern
+  - creating a mock API with AWS Gateway
+  - Authenticating API Requests
+- [Building Serverless Microservices](#building-serverless-microservices)
 
 ## Introduction to Microservices
 
@@ -101,4 +105,51 @@ Microservices:
 
 ---
 
-## API Gateway Pattern and Tools
+## API Gateway 
+
+### API Gateway Pattern and Tools
+- stops the consumer of a microservice from directly accessing it 
+- simplifies the systems interface by combining multiple APIs to one 
+- can perform authentication and authorization (instead of all the microservices needing this)
+- simplifies monitoring (instead of all the microservices needing this)
+- API catalogue and documentation 
+
+common api gateway tools:
+- aws api gateway:
+  - part of AWS
+  - easy to learn
+  - no complex setup (cloud formation or can use console / UI)
+  - needs to be created per API 
+- google Apigee
+  - enterprise level / use (costly)
+  - supports various deployment models 
+  - hybrid cloud (i.e. aws and on local data centres)
+  - complex
+- Kong
+  - enterprise level (very expensive)
+  - high throughput
+
+### Create a Mock API with AWS API Gateway
+- will create one and use it for the addHotel.html form 
+- go to api gateway in aws console => create REST API => build => name it "newHotelApi" => create
+- all the API definitions will be in the 'resources', but we need to deploy the API to stages first  
+- "create method" will create an API
+  - choose post 
+  - it can go to lambda, http, mock, aws service, vpc link... we'll use mock + create 
+  - we can click test as well 
+- to deploy this, click deploy and make a new stage. make stage name 'test'
+  - once deployed, you can see an invoke URL. paste this in the addHotel.html form. 
+  - when we go to submit the form, we get a 500 error. its because the mock only accepts application/json but our form is sending 'multipart/form-data'. in resources => post => integration request => mapping templates we can edit this and add a new mapping template for multipart/form-data. then we need to re-deploy
+  - now when we submit the form its a 403 CORS error. in the resource details click 'enable cors' and tick POST, confirm with save and redeploy
+  - now it responds with 200 OK
+
+### Authenticating API Requests 
+- we don't want our API open to the public, only if they have a user and password in our system (authentication) - and authorise them that this API is relevant to them (authentication).
+-  in API gateway click on the authorizers tab
+  - click create an authorizer and choose cognito as the type, and select the one we made earlier
+  - name it and add to the token source "Authorization", and test it. without a token it should be 403, with a token (this is logging from cognito)
+- we now need to go to resources/post and click on the 'method request' and add the authorization to it 
+
+---
+
+## Building Serverless Microservices 
