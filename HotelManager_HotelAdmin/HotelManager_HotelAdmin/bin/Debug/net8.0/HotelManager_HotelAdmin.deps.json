@@ -8,6 +8,7 @@
     ".NETCoreApp,Version=v8.0": {
       "HotelManager_HotelAdmin/1.0.0": {
         "dependencies": {
+          "AWSSDK.DynamoDBv2": "3.7.302.16",
           "AWSSDK.S3": "3.7.307.16",
           "Amazon.Lambda.APIGatewayEvents": "2.7.0",
           "Amazon.Lambda.Core": "2.2.0",
@@ -51,6 +52,17 @@
           "lib/net8.0/AWSSDK.Core.dll": {
             "assemblyVersion": "3.3.0.0",
             "fileVersion": "3.7.303.15"
+          }
+        }
+      },
+      "AWSSDK.DynamoDBv2/3.7.302.16": {
+        "dependencies": {
+          "AWSSDK.Core": "3.7.303.15"
+        },
+        "runtime": {
+          "lib/net8.0/AWSSDK.DynamoDBv2.dll": {
+            "assemblyVersion": "3.3.0.0",
+            "fileVersion": "3.7.302.16"
           }
         }
       },
@@ -174,6 +186,13 @@
       "sha512": "sha512-HvZ4+TZ9Ua42OLIZRBXOh6kLDfTEtRTVH6Lub7fdzNI2NbZOt3OhMYuCvr3ysz6vC/xFw4q2W4DN5LUc+oymgA==",
       "path": "awssdk.core/3.7.303.15",
       "hashPath": "awssdk.core.3.7.303.15.nupkg.sha512"
+    },
+    "AWSSDK.DynamoDBv2/3.7.302.16": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-hNSMgNFGD1i4koqLjrLhC8E2tCFT4ir6qu6X2CYqd8Hnj0ycUL4jJm41/vma0JjMKnfdYJpHx4JY3hHaGXCoUg==",
+      "path": "awssdk.dynamodbv2/3.7.302.16",
+      "hashPath": "awssdk.dynamodbv2.3.7.302.16.nupkg.sha512"
     },
     "AWSSDK.S3/3.7.307.16": {
       "type": "package",

@@ -303,3 +303,29 @@ await client.PutObjectAsync(new PutObjectRequest
   - everything else is fine, create table
 
 ### Storing Information in DynamoDB
+- firstly our putObjectAsync into s3 could fail, we need to wrap that in a try/catch block 
+- need to install the dynamo SDK: `AWSSDK.DynamoDBv2`
+- create a model/Hotel.cs model 
+- hook it up in the code:
+````c#
+var dbClient = new AmazonDynamoDBClient(RegionEndpoint.GetBySystemName(region));
+
+try
+{
+    var hotel = new Hotel
+    {
+        UserId = userId,
+        Id = Guid.NewGuid().ToString(),
+        Name = hotelName,
+        CityName = hotelCity,
+        Price = int.Parse(hotelPrice),
+        Rating = int.Parse(hotelRating),
+        FileName = fileName
+    };
+
+    using var dbContext = new DynamoDBContext(dbClient);
+    await dbContext.SaveAsync(hotel);
+}
+````
+
+### Connecting API Gateway to Lambda via a Proxy Resource

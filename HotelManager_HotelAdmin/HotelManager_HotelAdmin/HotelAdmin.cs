@@ -2,10 +2,13 @@
 using System.Text;
 using System.Text.Json;
 using Amazon;
+using Amazon.DynamoDBv2;
+using Amazon.DynamoDBv2.DataModel;
 using Amazon.Lambda.APIGatewayEvents;
 using Amazon.Lambda.Core;
 using Amazon.S3;
 using Amazon.S3.Model;
+using HotelManager_HotelAdmin.Models;
 using HttpMultipartParser;
 
 [assembly: LambdaSerializer(typeof(Amazon.Lambda.Serialization.SystemTextJson.DefaultLambdaJsonSerializer))]
@@ -64,15 +67,38 @@ public class HotelAdmin
        var bucketName = Environment.GetEnvironmentVariable("bucketName");
        
        var client = new AmazonS3Client(RegionEndpoint.GetBySystemName(region));
-       await client.PutObjectAsync(new PutObjectRequest
+       var dbClient = new AmazonDynamoDBClient(RegionEndpoint.GetBySystemName(region));
+       
+       try
        {
-           BucketName = bucketName,
-           Key = fileName, // name of the file
-           InputStream = fileContentStream,
-           AutoCloseStream = true
-       });
-        
-        Console.WriteLine("OK.");
+           await client.PutObjectAsync(new PutObjectRequest
+           {
+               BucketName = bucketName,
+               Key = fileName, // name of the file
+               InputStream = fileContentStream,
+               AutoCloseStream = true
+           });
+
+           var hotel = new Hotel
+           {
+                UserId = userId,
+                Id = Guid.NewGuid().ToString(),
+                Name = hotelName,
+                CityName = hotelCity,
+                Price = int.Parse(hotelPrice),
+                Rating = int.Parse(hotelRating),
+                FileName = fileName
+           };
+
+           using var dbContext = new DynamoDBContext(dbClient);
+           await dbContext.SaveAsync(hotel);
+       }
+       catch (Exception e)
+       {
+           Console.WriteLine(e);
+       }
+
+       Console.WriteLine("OK.");
         
         return response;
     }
