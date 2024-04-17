@@ -1,0 +1,13 @@
+C:\dev\01_learnings\microservices-aws-dotnet\HotelManager_HotelAdmin\HotelManager_HotelAdmin\bin\Debug\net8.0\HotelManager_HotelAdmin.deps.json
+C:\dev\01_learnings\microservices-aws-dotnet\HotelManager_HotelAdmin\HotelManager_HotelAdmin\bin\Debug\net8.0\HotelManager_HotelAdmin.dll
+C:\dev\01_learnings\microservices-aws-dotnet\HotelManager_HotelAdmin\HotelManager_HotelAdmin\bin\Debug\net8.0\HotelManager_HotelAdmin.pdb
+C:\dev\01_learnings\microservices-aws-dotnet\HotelManager_HotelAdmin\HotelManager_HotelAdmin\obj\Debug\net8.0\HotelManager_HotelAdmin.csproj.AssemblyReference.cache
+C:\dev\01_learnings\microservices-aws-dotnet\HotelManager_HotelAdmin\HotelManager_HotelAdmin\obj\Debug\net8.0\HotelManager_HotelAdmin.GeneratedMSBuildEditorConfig.editorconfig
+C:\dev\01_learnings\microservices-aws-dotnet\HotelManager_HotelAdmin\HotelManager_HotelAdmin\obj\Debug\net8.0\HotelManager_HotelAdmin.AssemblyInfoInputs.cache
+C:\dev\01_learnings\microservices-aws-dotnet\HotelManager_HotelAdmin\HotelManager_HotelAdmin\obj\Debug\net8.0\HotelManager_HotelAdmin.AssemblyInfo.cs
+C:\dev\01_learnings\microservices-aws-dotnet\HotelManager_HotelAdmin\HotelManager_HotelAdmin\obj\Debug\net8.0\HotelManager_HotelAdmin.csproj.CoreCompileInputs.cache
+C:\dev\01_learnings\microservices-aws-dotnet\HotelManager_HotelAdmin\HotelManager_HotelAdmin\obj\Debug\net8.0\HotelManager_HotelAdmin.sourcelink.json
+C:\dev\01_learnings\microservices-aws-dotnet\HotelManager_HotelAdmin\HotelManager_HotelAdmin\obj\Debug\net8.0\HotelManager_HotelAdmin.dll
+C:\dev\01_learnings\microservices-aws-dotnet\HotelManager_HotelAdmin\HotelManager_HotelAdmin\obj\Debug\net8.0\refint\HotelManager_HotelAdmin.dll
+C:\dev\01_learnings\microservices-aws-dotnet\HotelManager_HotelAdmin\HotelManager_HotelAdmin\obj\Debug\net8.0\HotelManager_HotelAdmin.pdb
+C:\dev\01_learnings\microservices-aws-dotnet\HotelManager_HotelAdmin\HotelManager_HotelAdmin\obj\Debug\net8.0\ref\HotelManager_HotelAdmin.dll

@@ -1,8 +1,11 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
 using System.Text;
 using System.Text.Json;
+using Amazon;
 using Amazon.Lambda.APIGatewayEvents;
 using Amazon.Lambda.Core;
+using Amazon.S3;
+using Amazon.S3.Model;
 using HttpMultipartParser;
 
 [assembly: LambdaSerializer(typeof(Amazon.Lambda.Serialization.SystemTextJson.DefaultLambdaJsonSerializer))]
@@ -13,7 +16,7 @@ public class HotelAdmin
 {
     // so api gateway can understand the response of the lambda
     // ILambdaContext gives us info on the execution context of the lambda
-    public APIGatewayProxyResponse AddHotel(APIGatewayProxyRequest request, ILambdaContext context)
+    public async Task<APIGatewayProxyResponse> AddHotel(APIGatewayProxyRequest request, ILambdaContext context)
     {
         var response = new APIGatewayProxyResponse()
         {
@@ -39,7 +42,10 @@ public class HotelAdmin
 
         var file = formData.Files.FirstOrDefault();
         var fileName = file.FileName;
-        // file.Data 
+
+        await using var fileContentStream = new MemoryStream();
+        await file.Data.CopyToAsync(fileContentStream);
+        fileContentStream.Position = 0;
 
         var userId = formData.GetParameterValue("userId");
         var idToken = formData.GetParameterValue("idToken");
@@ -53,6 +59,18 @@ public class HotelAdmin
            response.StatusCode = 401;
            response.Body = JsonSerializer.Serialize(new { Error = "Unauthorised. Must be a member of admin group" });
        }
+
+       var region = Environment.GetEnvironmentVariable("AWS_REGION"); // pre-defined env variable available to all lambdas
+       var bucketName = Environment.GetEnvironmentVariable("bucketName");
+       
+       var client = new AmazonS3Client(RegionEndpoint.GetBySystemName(region));
+       await client.PutObjectAsync(new PutObjectRequest
+       {
+           BucketName = bucketName,
+           Key = fileName, // name of the file
+           InputStream = fileContentStream,
+           AutoCloseStream = true
+       });
         
         Console.WriteLine("OK.");
         

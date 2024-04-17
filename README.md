@@ -212,7 +212,7 @@ Types of microservices (Chassis and templates)
 - install using nuget `HttpMultipartParser` 
 - to get the information out of our form:
 
-````js
+````c#
 // below is from HotelAdmin.cs "AddHotel"
 var bodyContent = request.IsBase64Encoded
     ? Convert.FromBase64String(request.Body)
@@ -272,3 +272,27 @@ if (group == null || group.Value != "Admin")
   - need to include our bucket arn and our IAM arn ^
 
 ### Uploading Files and Images to AWS S3
+- to upload to s3 we can use the nuget package `awssdk.s3`
+- in the lambda:
+````c#
+await using var fileContentStream = new MemoryStream();
+await file.Data.CopyToAsync(fileContentStream);
+fileContentStream.Position = 0;
+
+var region = Environment.GetEnvironmentVariable("AWS_REGION"); // pre-defined env variable available to all lambdas
+var bucketName = Environment.GetEnvironmentVariable("bucketName");
+
+// using the actual s3 sdk:
+var client = new AmazonS3Client(RegionEndpoint.GetBySystemName(region));
+await client.PutObjectAsync(new PutObjectRequest
+{
+    BucketName = bucketName,
+    Key = fileName, // name of the file
+    InputStream = fileContentStream,
+    AutoCloseStream = true
+});
+````
+- the AWS_REGION env variable exists by default on all lambdas, but we will need to make the "bucketName" variable of our s3 bucket ourselves in the UI. 
+  - lambda => configuration => environment variables => add
+
+### Creating and configuring a dynamoDB table
