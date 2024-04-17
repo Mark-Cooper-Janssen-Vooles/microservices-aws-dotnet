@@ -248,3 +248,22 @@ if (group == null || group.Value != "Admin")
   - need to install using nuget `System.IdentityModel.Tokens.Jwt`
 
 ### Storing Data and files in AWS
+- i.e. how to store the hotels image in AWS 
+- database or file storage
+  - relational db or no-sql db
+    - aws RDS offers relational databases, i.e. mySQL as a managed service 
+    - DynamoDB is no-sql. data is stored as json
+    - one RDS instance is OK, however each microservice MUST have its own db
+    - no cross-database queries or access
+  - file storage
+    - S3 is used for storing files 
+    - AWS Elastic file system is used for short-term storage
+- the flow looks like this:
+  - user uploads file to browser, which calls the api gateway, which calls lambda, which then tries to upload to the s3 file storage (for the image) and puts additional information (name etc) in the database 
+  - by default lambda does not have access to s3 or db, we need to use IAM to give it permissions and give this role to our lambda. called an "execution role"
+- go to IAM: create role, aws service, lambda. Give it access to cloudwatch, s3, dynamoDB
+  - named "HotelAdminLambdaExecutionRole"
+- go to Lambda
+  - find our addHotel lambda, go to configuration tab, then permissions tab, edit and change the lambda execution role to the one we just made
+
+### Create and Configure S3 Buckets
