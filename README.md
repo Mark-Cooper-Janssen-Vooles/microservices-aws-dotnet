@@ -267,3 +267,8 @@ if (group == null || group.Value != "Admin")
   - find our addHotel lambda, go to configuration tab, then permissions tab, edit and change the lambda execution role to the one we just made
 
 ### Create and Configure S3 Buckets
+- go to s3, create bucket, give it a name and untick 'block all public access'
+- need to add a policy to the bucket, he's done it for us here: https://github.com/aussiearef/MicroservicesWithAWS/blob/main/S3-Policy.json
+  - need to include our bucket arn and our IAM arn ^
+
+### Uploading Files and Images to AWS S3
