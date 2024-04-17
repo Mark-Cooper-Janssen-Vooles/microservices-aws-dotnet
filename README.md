@@ -296,3 +296,10 @@ await client.PutObjectAsync(new PutObjectRequest
   - lambda => configuration => environment variables => add
 
 ### Creating and configuring a dynamoDB table
+- dynamoDB => create table => name it 
+  - it needs a partition key which refers to where data is stored in shards
+    - i.e. we can use the admin's userId and store all the hotels created by that user in one location. or we could use the cityName - the user wants to see all the hotels in Paris for e.g. we will use userId
+  - sort key is optional but improves perfomance, sort through the items listed under a specific partition key.
+  - everything else is fine, create table
+
+### Storing Information in DynamoDB
