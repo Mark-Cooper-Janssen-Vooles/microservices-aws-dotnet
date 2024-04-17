@@ -207,3 +207,44 @@ Types of microservices (Chassis and templates)
   - i.e. ours will be "HotelMAnager_HotelAdmin::HotelManager_HotelAdmin.HotelAdmin::AddHotel"
 - we can then go to the test tab and press test, and see that its working
 - we can also go to the 'monitor' tab to see the cloudwatch logs 
+
+### Capturing the Request body in AWS Lambda as an API Backend
+- install using nuget `HttpMultipartParser` 
+- to get the information out of our form:
+
+````js
+// below is from HotelAdmin.cs "AddHotel"
+var bodyContent = request.IsBase64Encoded
+    ? Convert.FromBase64String(request.Body)
+    : Encoding.UTF8.GetBytes(request.Body);
+
+using var memStream = new MemoryStream(bodyContent);
+var formData = MultipartFormDataParser.Parse(memStream);
+
+// strings are from the html frontend file names
+var hotelName = formData.GetParameterValue("hotelName");
+var hotelRating = formData.GetParameterValue("hotelRating");
+var hotelCity = formData.GetParameterValue("hotelCity");
+var hotelPrice = formData.GetParameterValue("hotelPrice");
+
+var file = formData.Files.FirstOrDefault();
+var fileName = file.FileName;
+// file.Data 
+
+var userId = formData.GetParameterValue("userId");
+var idToken = formData.GetParameterValue("idToken");
+
+// we pass the json web token in both the headers and 
+var token = new JwtSecurityToken(jwtEncodedString: idToken);
+var group = token.Claims.First(x => x.Type == "cognito:groups");
+
+if (group == null || group.Value != "Admin")
+{
+    response.StatusCode = 401;
+    response.Body = JsonSerializer.Serialize(new { Error = "Unauthorised. Must be a member of admin group" });
+}
+````
+- we need to deserialize the JWT authentication token
+  - need to install using nuget `System.IdentityModel.Tokens.Jwt`
+
+### Storing Data and files in AWS

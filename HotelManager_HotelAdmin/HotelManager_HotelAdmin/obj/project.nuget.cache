@@ -1,12 +1,20 @@
 {
   "version": 2,
-  "dgSpecHash": "8HMBdWRN5/Xy1ofAQTfNF1ESvdaZYholPZneQ1KnR80N2mHI+5AWNIs1Ew9gUy+OKlwgzSH3Jo6CQEbkOoGY+w==",
+  "dgSpecHash": "lmZmFA8Vkm1iGMB6p2JKsVJpnoucu1r46jSduCU9CT+KnezdlDr3Rdcc9X79pezo6/ZsCa/w7W4ZtsUTbV2VMA==",
   "success": true,
   "projectFilePath": "C:\\dev\\01_learnings\\microservices-aws-dotnet\\HotelManager_HotelAdmin\\HotelManager_HotelAdmin\\HotelManager_HotelAdmin.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\mark.janssen-vooles\\.nuget\\packages\\amazon.lambda.apigatewayevents\\2.7.0\\amazon.lambda.apigatewayevents.2.7.0.nupkg.sha512",
     "C:\\Users\\mark.janssen-vooles\\.nuget\\packages\\amazon.lambda.core\\2.2.0\\amazon.lambda.core.2.2.0.nupkg.sha512",
-    "C:\\Users\\mark.janssen-vooles\\.nuget\\packages\\amazon.lambda.serialization.systemtextjson\\2.4.2\\amazon.lambda.serialization.systemtextjson.2.4.2.nupkg.sha512"
+    "C:\\Users\\mark.janssen-vooles\\.nuget\\packages\\amazon.lambda.serialization.systemtextjson\\2.4.2\\amazon.lambda.serialization.systemtextjson.2.4.2.nupkg.sha512",
+    "C:\\Users\\mark.janssen-vooles\\.nuget\\packages\\httpmultipartparser\\8.4.0\\httpmultipartparser.8.4.0.nupkg.sha512",
+    "C:\\Users\\mark.janssen-vooles\\.nuget\\packages\\microsoft.identitymodel.abstractions\\7.5.1\\microsoft.identitymodel.abstractions.7.5.1.nupkg.sha512",
+    "C:\\Users\\mark.janssen-vooles\\.nuget\\packages\\microsoft.identitymodel.jsonwebtokens\\7.5.1\\microsoft.identitymodel.jsonwebtokens.7.5.1.nupkg.sha512",
+    "C:\\Users\\mark.janssen-vooles\\.nuget\\packages\\microsoft.identitymodel.logging\\7.5.1\\microsoft.identitymodel.logging.7.5.1.nupkg.sha512",
+    "C:\\Users\\mark.janssen-vooles\\.nuget\\packages\\microsoft.identitymodel.tokens\\7.5.1\\microsoft.identitymodel.tokens.7.5.1.nupkg.sha512",
+    "C:\\Users\\mark.janssen-vooles\\.nuget\\packages\\microsoft.io.recyclablememorystream\\3.0.0\\microsoft.io.recyclablememorystream.3.0.0.nupkg.sha512",
+    "C:\\Users\\mark.janssen-vooles\\.nuget\\packages\\system.buffers\\4.5.1\\system.buffers.4.5.1.nupkg.sha512",
+    "C:\\Users\\mark.janssen-vooles\\.nuget\\packages\\system.identitymodel.tokens.jwt\\7.5.1\\system.identitymodel.tokens.jwt.7.5.1.nupkg.sha512"
   ],
   "logs": []
 }
