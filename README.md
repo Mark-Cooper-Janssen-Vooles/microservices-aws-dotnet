@@ -381,3 +381,20 @@ try
 
 
 ### Domains and Boundaries 
+- now we can create a hotel, storing the image in s3 and the data in dynamoDB
+- we want to now see all the hotels created, i.e. using GET
+- do we need a new lambda/microservice for this or can we just add a new method to our existing lambda function? 
+  - in OOP we have 'single responsibility principle' - each entity must do only one job. not so simple in microservices... we need to know the domain and the domain boundary.
+  - a domain is a specific area of business or application functionality. the limit that separates domains is called the "domain boundary"
+  - we have a entity called HOTEL. an Admin adds,edit,delets hotels. A customer searches for hotel / books. A hotel manager views bookings and approves bookings. 
+  - the HOTEL entity means different things to different users, in this case the meaning is the domain, i.e.: admin domain, customer domain, booking management domain
+    - i.e. we could have one microservice for ADMIN domain that does get/add/edit/delete of hotels
+    - one that does CUSTOMER domain searching/booking 
+    - one that does BOOKING MANAGEMENT domain viewing bookings, approving bookings
+  - to improve scalability / performance, we pay need to break a microservice down further forever. and if a domain is quite large.
+- "Each microservice is designed to handle a specific business capability"
+- "Domain boundary separates one microservice from another and ensures each microservice is responsible for a specific set of business capabilities"
+- By defining clear domain boundaries, microservices can be independently developed / deloped / scaled which improves the agility and scalability of the overall system
+
+- given the above, we'll add the GET to our existing microservice.
+
