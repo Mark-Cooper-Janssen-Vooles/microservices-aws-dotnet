@@ -5,3 +5,13 @@ C:\dev\01_learnings\microservices-aws-dotnet\HotelManager_HotelAdmin\HotelManage
 C:\dev\01_learnings\microservices-aws-dotnet\HotelManager_HotelAdmin\HotelManager_HotelAdmin\bin\Release\net8.0\publish\Amazon.Lambda.APIGatewayEvents.dll
 C:\dev\01_learnings\microservices-aws-dotnet\HotelManager_HotelAdmin\HotelManager_HotelAdmin\bin\Release\net8.0\publish\Amazon.Lambda.Core.dll
 C:\dev\01_learnings\microservices-aws-dotnet\HotelManager_HotelAdmin\HotelManager_HotelAdmin\bin\Release\net8.0\publish\Amazon.Lambda.Serialization.SystemTextJson.dll
+C:\dev\01_learnings\microservices-aws-dotnet\HotelManager_HotelAdmin\HotelManager_HotelAdmin\bin\Release\net8.0\publish\AWSSDK.Core.dll
+C:\dev\01_learnings\microservices-aws-dotnet\HotelManager_HotelAdmin\HotelManager_HotelAdmin\bin\Release\net8.0\publish\AWSSDK.DynamoDBv2.dll
+C:\dev\01_learnings\microservices-aws-dotnet\HotelManager_HotelAdmin\HotelManager_HotelAdmin\bin\Release\net8.0\publish\AWSSDK.S3.dll
+C:\dev\01_learnings\microservices-aws-dotnet\HotelManager_HotelAdmin\HotelManager_HotelAdmin\bin\Release\net8.0\publish\HttpMultipartParser.dll
+C:\dev\01_learnings\microservices-aws-dotnet\HotelManager_HotelAdmin\HotelManager_HotelAdmin\bin\Release\net8.0\publish\Microsoft.IdentityModel.Abstractions.dll
+C:\dev\01_learnings\microservices-aws-dotnet\HotelManager_HotelAdmin\HotelManager_HotelAdmin\bin\Release\net8.0\publish\Microsoft.IdentityModel.JsonWebTokens.dll
+C:\dev\01_learnings\microservices-aws-dotnet\HotelManager_HotelAdmin\HotelManager_HotelAdmin\bin\Release\net8.0\publish\Microsoft.IdentityModel.Logging.dll
+C:\dev\01_learnings\microservices-aws-dotnet\HotelManager_HotelAdmin\HotelManager_HotelAdmin\bin\Release\net8.0\publish\Microsoft.IdentityModel.Tokens.dll
+C:\dev\01_learnings\microservices-aws-dotnet\HotelManager_HotelAdmin\HotelManager_HotelAdmin\bin\Release\net8.0\publish\Microsoft.IO.RecyclableMemoryStream.dll
+C:\dev\01_learnings\microservices-aws-dotnet\HotelManager_HotelAdmin\HotelManager_HotelAdmin\bin\Release\net8.0\publish\System.IdentityModel.Tokens.Jwt.dll

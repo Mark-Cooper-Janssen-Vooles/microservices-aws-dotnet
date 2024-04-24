@@ -19,6 +19,15 @@ Contents:
   - Authenticating API Requests
 - [Building Serverless Microservices](#building-serverless-microservices)
 
+
+### Local Dev
+- open IIS, right-click sites and add new website 
+  - specify the path as this repo
+  - bind it as http - localhost - 6060 
+- open up localhost:6060
+  - create new user 
+
+
 ## Introduction to Microservices
 
 ### Microservice vs Monolithc applications
@@ -329,3 +338,46 @@ try
 ````
 
 ### Connecting API Gateway to Lambda via a Proxy Resource
+- our API in api gateway is just a mock API now - just connected to a mock
+- we want to attach our AddHotel lambda to our API 
+- when you create an API - if the request is a POST of PUT that has headers/body, the header/body will not be forwarded to the lambda
+  - not a problem for GET, but it is for PUT and POST 
+  - in order to forward the headers and body, we need to create a 'proxy resource'
+- go to the API in the API Gateway, click on the exisitng POST resource, then click actions, then resource. tick to create a proxy resource, add a resource name like 'admin' , and tick CORS
+  - resource path needs a specific format called "greedy format" like `{Admin+}`
+  - after this is made, you should see /{Admin+} under POST - click on any, then click edit integration
+  - select Lambda function, find the lambdas ARN, add the execution role we made earlier, save 
+- click method request
+  - make the authorisation "NewHotelAuth" (which we used before in incognito)
+- in the OPTIONS area - this is only used for pre-flight to see if CORS headers are working. 
+  - integration request for OPTIONS can be mock, just make sure the mapping application/json request is returning the cors headers, i.e.
+````json
+{ 
+  statusCode: 200, 
+  headers: {
+    "Access-Control-Allow-Headers": "*",
+    "Access-Control-Allow-Origin": "*",
+    "Access-Control-Allow-Methods": "*"
+  }
+}
+````
+- OPTIONS returns the CORS headers in the `integration request`
+- ANY in the `integration request` has the lambda proxy (also must return CORS headers - this is in our C# code), and the `method request` uses the incognito auth 
+- now we deploy the changes
+  - to test them, we must open the /{admin+} to find the invoke URL to use
+  - add this URL to the addHotel.html form action
+  - sign in, go to add hotel, check network tab. preflight request works, lambda seems to fail. can run this in the proxy POST test area, seems IAM issue
+  - needed to add apigateway to the IAM role:
+  ````
+  "Principal": {
+    "Service": [
+        "apigateway.amazonaws.com",
+        "lambda.amazonaws.com"
+    ]
+  }
+  ````
+- had some issues here, had to remake the API Gateway and it worked - might have picked the wrong role or something. This was the solution on stack overflow :/
+- once its working, should be able to go to s3 and see the image. and also go to dynamoDB to see the 
+
+
+### Domains and Boundaries 
