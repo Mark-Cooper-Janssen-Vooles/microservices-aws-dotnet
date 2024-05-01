@@ -4,6 +4,7 @@ using System.Text.Json;
 using Amazon;
 using Amazon.DynamoDBv2;
 using Amazon.DynamoDBv2.DataModel;
+using Amazon.DynamoDBv2.DocumentModel;
 using Amazon.Lambda.APIGatewayEvents;
 using Amazon.Lambda.Core;
 using Amazon.S3;
@@ -17,6 +18,43 @@ namespace HotelManager_HotelAdmin;
 
 public class HotelAdmin
 {
+    public async Task<APIGatewayProxyResponse> ListHotels(APIGatewayProxyRequest request)
+    {
+        // query string param called token is passed to this lambda method.
+        var response = new APIGatewayProxyResponse()
+        {
+            Headers = new Dictionary<string, string>(),
+            StatusCode = 200
+        };
+        
+        response.Headers.Add("Access-Control-Allow-Origin", "*");
+        response.Headers.Add("Access-Control-Allow-Headers", "*");
+        response.Headers.Add("Access-Control-Allow-Methods", "OPTIONS,GET");
+        response.Headers.Add("Content-Type", "application/json");
+
+        var token = request.QueryStringParameters["token"]; //jwt
+        var tokenDetails = new JwtSecurityToken(jwtEncodedString: token);
+        var userId = tokenDetails.Claims.FirstOrDefault(x => x.Type == "sub")?.Value; // OAuth thing, always carrys the unique id of the user
+        
+        var region = Environment.GetEnvironmentVariable("AWS_REGION"); // pre-defined env variable available to all lambdas
+        var dbClient = new AmazonDynamoDBClient(RegionEndpoint.GetBySystemName(region));
+        
+        try
+        {
+            using var dbContext = new DynamoDBContext(dbClient);
+            var hotels = await dbContext.ScanAsync<Hotel>(new[] { new ScanCondition("UserId", ScanOperator.Equal, userId) })
+                .GetRemainingAsync();
+            response.Body = JsonSerializer.Serialize(hotels);
+        }
+        catch (Exception e)
+        {
+            response.StatusCode = 400;
+            Console.WriteLine(e);
+        }
+
+        return response;
+    }
+    
     // so api gateway can understand the response of the lambda
     // ILambdaContext gives us info on the execution context of the lambda
     public async Task<APIGatewayProxyResponse> AddHotel(APIGatewayProxyRequest request, ILambdaContext context)
@@ -29,13 +67,14 @@ public class HotelAdmin
         response.Headers.Add("Access-Control-Allow-Origin", "*");
         response.Headers.Add("Access-Control-Allow-Headers", "*");
         response.Headers.Add("Access-Control-Allow-Methods", "OPTIONS,POST");
+        response.Headers.Add("Content-Type", "application/json");
 
         var bodyContent = request.IsBase64Encoded
             ? Convert.FromBase64String(request.Body)
             : Encoding.UTF8.GetBytes(request.Body);
 
-        using var memStream = new MemoryStream(bodyContent);
-        var formData = MultipartFormDataParser.Parse(memStream);
+        await using var memStream = new MemoryStream(bodyContent);
+        var formData = await MultipartFormDataParser.ParseAsync(memStream).ConfigureAwait(false);
 
         // strings are from the html frontend file names
         var hotelName = formData.GetParameterValue("hotelName");
@@ -48,7 +87,12 @@ public class HotelAdmin
 
         await using var fileContentStream = new MemoryStream();
         await file.Data.CopyToAsync(fileContentStream);
-        fileContentStream.Position = 0;
+
+        var fileSize = fileContentStream.Length;
+        Console.WriteLine($"File size: {fileSize} bytes");
+        
+        string contentType = file.ContentType;
+        Console.WriteLine($"Content-Type: {contentType}");
 
         var userId = formData.GetParameterValue("userId");
         var idToken = formData.GetParameterValue("idToken");
@@ -75,8 +119,7 @@ public class HotelAdmin
            {
                BucketName = bucketName,
                Key = fileName, // name of the file
-               InputStream = fileContentStream,
-               AutoCloseStream = true
+               InputStream = file.Data
            });
 
            var hotel = new Hotel

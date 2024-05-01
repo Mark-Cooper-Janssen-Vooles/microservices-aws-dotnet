@@ -398,3 +398,114 @@ try
 
 - given the above, we'll add the GET to our existing microservice.
 
+### Creating a Restful GET API in API Gateway with a Lambda microserivce
+- Add new function to HotelManager_HotelAdmin `HotelAdmin.cs`:
+````c#
+    public async Task<APIGatewayProxyResponse> ListHotels(APIGatewayProxyRequest request)
+    {
+        // query string param called token is passed to this lambda method.
+        var response = new APIGatewayProxyResponse()
+        {
+            Headers = new Dictionary<string, string>(),
+            StatusCode = 200
+        };
+        
+        response.Headers.Add("Access-Control-Allow-Origin", "*");
+        response.Headers.Add("Access-Control-Allow-Headers", "*");
+        response.Headers.Add("Access-Control-Allow-Methods", "OPTIONS,GET");
+        response.Headers.Add("Content-Type", "application/json");
+
+        var token = request.QueryStringParameters["token"]; //jwt
+        var tokenDetails = new JwtSecurityToken(jwtEncodedString: token);
+        var userId = tokenDetails.Claims.FirstOrDefault(x => x.Type == "sub"); // OAuth thing, always carrys the unique id of the user
+        
+        var region = Environment.GetEnvironmentVariable("AWS_REGION"); // pre-defined env variable available to all lambdas
+        var dbClient = new AmazonDynamoDBClient(RegionEndpoint.GetBySystemName(region));
+        
+        try
+        {
+            using var dbContext = new DynamoDBContext(dbClient);
+            var hotels = await dbContext.ScanAsync<Hotel>(new[] { new ScanCondition("UserId", ScanOperator.Equal, userId) })
+                .GetRemainingAsync();
+            response.Body = JsonSerializer.Serialize(hotels);
+        }
+        catch (Exception e)
+        {
+            response.StatusCode = 400;
+            Console.WriteLine(e);
+        }
+
+        return response;
+    }
+````
+- now we need to create a new lambda function in AWS, because we want a separate API that returns this list of API (needs to point to this new method)
+  - created this 'ListHotels', gave it correct execution role, uploaded ZIP file 
+  - updated handler to point to `HotelMAnager_HotelAdmin::HotelManager_HotelAdmin.HotelAdmin::ListHotels`
+
+````
+Creating the Lambda Function
+- Get the code of the HotelMan_HotelAdmin project from GitHub (or write it yourself following several previous lectures).
+- Package the code using the "dotnet lambda package HotelMan_HotelAdmin.csproj -o HotelAdmin.zip" command. This command will create HotelAdmin.zip, including all the files required to complete the Lambda function.
+- Log in to AWS Console.
+- Make sure you have created and configured the DynamoDB table before.
+- Go to Lambda service.
+- Then create a new Lambda function called ListAdminHotels and upload the HotelAdmin.zip file as its code (use dotnet 6 as runtime).
+Go to the Code table, and under the Runtime Settings section, edit the Handler attribute and point it to HotelMan_HotelAdmin::HotelMan_HotelAdmin.HotelAdmin::ListHotels
+
+Creating and Assigning the Execution Role
+- Now you must create an execution IAM Role and assign it to Lambda.
+- Go to IAM service.
+- Go to the Roles tab.
+- Create a new Role.
+- Choose Lambda as your use case.
+- In the Permissions step, add the AmazonDynamoDBReadOnlyAccess policy to the Role.
+- Click on Next and provide a name for your Role. i.e., ListAdminHotelsExecutionRole.
+- Once the Role is created, go back to Lambda service.
+- Find the ListAdminHotels function and click on it.
+- Go to the Configuration tab.
+- On the left side of the screen, click on the Permissions tab.
+- Edit the Execution Role and assign ListAdminHotelsExecutionRole as the execution role of the Lambda.
+````
+- now we need to create a new API Gateway 
+````
+Creating a Proxy REST API in AWS API Gateway
+This practice will teach you to pass Query String parameters to your Lambda function.
+- Login to AWS Console.
+- Go to the API Gateway service's dashboard.
+- Click on the "Create API" button and then choose REST API. Then click on the Build button.
+- Call the new API as ListAdminHotels.
+- From the Actions drop-down, choose Create Method and add a GET method to the API.
+- Ensure "Use Lambda Proxy integration" is enabled when creating the GET method.
+- Choose the "Lambda Function" as the integration type of the API.
+- Enable "Use Lambda Proxy integration."
+- In the Lambda Function box, type L so the ListAdminHotels appears. Then select it.
+- Click on the Save button, then click on OK.
+- From the Actions drop-down button, select Enable CORS.
+- Click on the "Enable CORS and replace existing CORS headers" button.
+- Click on Resources on the left side of the screen. The GET and OPTIONS methods will appear.
+- Click on Options.
+- Click on Integration Request.
+- Expand Mapping Templates.
+- Click on application/json.
+- A box appears. Add the response code (200) and the CORS headers. Allow OPTIONS and GET. You can use the example template from this address and change it as required: https://shorturl.at/ikCDZ
+- Click on Save.
+- DO NOT configure authorization for this API.
+- Create a Proxy resource with a path like {listadminhotels+}.
+- Enable "Configure as a proxy resource" and "Enable API Gateway CORS".
+- Set Resource Path to "{listadminhotels+}" and Resource Name to "listadminhotels".
+- Once the resource is created, click on "ANY" (under the resource path {listadminhotels+}) and connect it to the ListAdminHotels Lambda function. Then click on Save.
+- Under the resource of your method, click on ANY to see the "Method Execution" page (where four boxes are seen).
+- Click on the "Method Request" box.
+- Then, expand "URL Query String Parameters" in the Method Request page.
+- Click on the "Add query string" button.
+- type in "token" in the name field. Then click on the tick button on the right to save.
+- Enable the "required" option.
+- Click on OPTIONS under the created resource.
+- Make sure its integration type is MOCK and its Integration returns the HTTP 200 and the CORS headers.
+- Deploy your API to a new Stage (i.e., Test).
+- Make a GET request to the Invoke URL of the GET proxy resource.
+````
+
+
+NOTE: Some issue with the s3 upload. seems to work manually uploaded into s3, so going from the form to the c# lambda to the s3 seems to be a problem. Guys code is here: 
+https://github.com/aussiearef/MicroservicesWithAWS_Dotnet_HotelMan/blob/main/HotelMan_HotelAdmin/HotelMan_HotelAdmin/HotelAdmin.cs
