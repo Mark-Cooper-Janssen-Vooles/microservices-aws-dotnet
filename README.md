@@ -530,4 +530,111 @@ https://github.com/aussiearef/MicroservicesWithAWS_Dotnet_HotelMan/blob/main/Hot
     - we can compare the kid's to see which one is used to sign the idToken, and grab that one to validate the JWT
     - we can use secrets manager, create a new secret of the key, choose 'other type of secret' and paste the whole key into the Plaintext area
       - now to access this from our lambda, we need a lambda execution role that has access to secrets manager 
-      - jwt.io has a libraries section which has lots of libraries for all coding languages to validate tokens 
+      - jwt.io has a libraries section which has lots of libraries for all coding languages to validate tokens  (installed below)
+
+### Protecting a GET API with Lambda Authorizers 
+- create a new class library 'LambdaAuthorizer'
+- install nuget packages: `amazon.lambda.core`, `amazon.lambda.apigatewayevents`, `awssdk.secretsmanager`, `System.identitymodel.tokens.jwt`
+- Lambda Authorizer code:
+````c#
+using System.IdentityModel.Tokens.Jwt;
+using System.Text.Json;
+using Amazon.Lambda.APIGatewayEvents;
+using Amazon.SecretsManager;
+using Amazon.SecretsManager.Model;
+using Microsoft.IdentityModel.Tokens;
+
+namespace LambdaAuthorizer;
+
+public class Authorizer
+{
+    public async Task<APIGatewayCustomAuthorizerResponse> Auth(APIGatewayCustomAuthorizerRequest request)
+    {
+        // in api gateway UI we have 'request' and query string param as 'token' in the lambda event payload, which populates:
+        var idToken = request.AuthorizationToken;
+        var idTokenDetails = new JwtSecurityToken(jwtEncodedString: idToken);
+
+        var kid = idTokenDetails.Header["kid"].ToString();
+        var issuer = idTokenDetails.Claims.First(x => x.Type == "iss").Value;
+        var audience = idTokenDetails.Claims.First(x => x.Type == "aud").Value;
+        var userId = idTokenDetails.Claims.First(x => x.Type == "sub").Value;
+        
+        var response = new APIGatewayCustomAuthorizerResponse()
+        {
+            PrincipalID = userId,
+            PolicyDocument = new APIGatewayCustomAuthorizerPolicy()
+            {
+                Version = "2012-10-17",
+                Statement = new List<APIGatewayCustomAuthorizerPolicy.IAMPolicyStatement>()
+                {
+                   new APIGatewayCustomAuthorizerPolicy.IAMPolicyStatement()
+                   {
+                       Action = new HashSet<string>{"execute-api:Invoke"},
+                       Effect = "Allow",
+                       Resource = new HashSet<string>{request.MethodArn}
+                   }
+                }
+            }
+        };
+        
+        // get the key stored in secrets manager:
+        var secretManagerClient = new AmazonSecretsManagerClient();
+        var secret = await secretManagerClient.GetSecretValueAsync(new GetSecretValueRequest
+        {
+            SecretId = "hotelCognitoKey"
+        });
+
+        var privateKeys = secret.SecretString;
+        var jwks = JsonSerializer.Deserialize<JsonWebKeySet>(privateKeys, new JsonSerializerOptions()
+        {
+            PropertyNameCaseInsensitive = true
+        });
+
+        var privateKey = jwks.Keys.First(x => x.Kid == kid);
+
+        var handler = new JwtSecurityTokenHandler();
+        var result = await handler.ValidateTokenAsync(idToken, new TokenValidationParameters
+        {
+            ValidIssuer = issuer,
+            ValidAudience = audience,
+            IssuerSigningKey = privateKey
+        });
+
+        if (!result.IsValid) throw new UnauthorizedAccessException("Token not valid");
+        
+        // authorise the user for APIs that require specific cognito groups
+        var apiGroupMapping = new Dictionary<string, string>()
+        {
+            { "litadminhotel+", "Admin" },
+            { "admin+", "Admin" }
+        };
+
+        var expectedGroup = apiGroupMapping.FirstOrDefault(x => request.Path.Contains(x.Key, StringComparison.InvariantCultureIgnoreCase));
+        if (!expectedGroup.Equals(default(KeyValuePair<string, string>)))
+        {
+            var userGroup = idTokenDetails.Claims.First(x => x.Type == "cognito:groups").Value;
+            if (!userGroup.Equals(expectedGroup.Value, StringComparison.CurrentCultureIgnoreCase))
+            {
+                // user is not authorised
+                response.PolicyDocument.Statement[0].Effect = "Deny";
+            }
+        }
+
+        return response;
+    }
+}
+````
+- zip this up `dotnet lambda package LambdaAuthorizer.csprok -o LambdaAuthorizer.zip`
+- create a lambda authorizer role in IAM:
+  - create role lambda
+  - choose roles: awslambdabasicexecutionrole, awslambdarole, secretsmanagerreadwrite
+  - call it `hotel-lambda-authoriser-execution-role` + create
+- create a new lambda function 'HotelLambdaAuthorizer' with dotnet runtime
+  - upload the zip
+  - edit the handler, `LambdaAuthorizer::LambdaAuthorizer::Authorizer::Auth`
+  - go to configuration tab, edit permissions, add the correct execution role
+- go to the ListAdminHotels api gateway, authorizers, create new authorizer
+  - call it "CustomAuthorizer"
+  - select the lambda
+  - set payload as request, query string, token
+  - enable token for 300 

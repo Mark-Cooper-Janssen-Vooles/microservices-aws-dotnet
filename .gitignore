@@ -1,1 +1,4 @@
 HotelManager_HotelAdmin/HotelManager_HotelAdmin/bin/**
+HotelManager_HotelAdmin/HotelManager_HotelAdmin/obj/**
+LambdaAuthorizer/LambdaAuthorizer/bin/**
+LambdaAuthorizer/LambdaAuthorizer/obj/**
