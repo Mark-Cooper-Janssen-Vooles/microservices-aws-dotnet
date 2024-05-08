@@ -509,3 +509,25 @@ This practice will teach you to pass Query String parameters to your Lambda func
 
 NOTE: Some issue with the s3 upload. seems to work manually uploaded into s3, so going from the form to the c# lambda to the s3 seems to be a problem. Guys code is here: 
 https://github.com/aussiearef/MicroservicesWithAWS_Dotnet_HotelMan/blob/main/HotelMan_HotelAdmin/HotelMan_HotelAdmin/HotelAdmin.cs
+
+### Exploring JWT and JSON Web Key Sets (JWKS)
+- we've now got a POST (new hotel) and GET (list admin hotels) methods
+- lambda authorisers vs cognito:
+  - lambda authorisers are lambda functions: when a client tries to access a resource behind api gateway, api gateway triggers the lambda auth function, and says if the user has the right to access the api or not.
+  - cognito authorisers can only perform authentication, lambda authorisers we can validate the token as well as check if the user has the correct rights (i.e. part of the admin group)
+  - if we want to defer the authorisation completely to API Gateway (and not perform it in the microservice code), lambda authorisers are the way to go.
+    - in the POST method we had a check `if (group == null || group.Value != "Admin")` using cognito, but in this GET we will use a lambda authoriser 
+
+- to create a new lambda authoriser in API Gateway, go to the api then click 'authorizers' and 'create authorizer'
+  - make it lambda, the token source should be "Authorization" for POST / PUT. we could make it a request instead of a token, i.e. for a GET we could pass the token through a query string called "token". 
+
+- we can pull the JWT out of the localstorage on the browser and chuck it in jwt.io to decode it
+  - we can see in the header: the kid (id of a private key made and stored by aws cognito), "alg" is the encryption algorithm, 
+  -  in the body the aud (audience), iss (issuer)
+  - documentation on doing this: https://docs.aws.amazon.com/cognito/latest/developerguide/amazon-cognito-user-pools-using-tokens-verifying-a-jwt.html
+  - need to use this: `https://cognito-idp.<Region>.amazonaws.com/<userPoolId>/.well-known/jwks.json`
+    - returns a JSON, there are two keys: one to sign access key, another to sign idToken
+    - we can compare the kid's to see which one is used to sign the idToken, and grab that one to validate the JWT
+    - we can use secrets manager, create a new secret of the key, choose 'other type of secret' and paste the whole key into the Plaintext area
+      - now to access this from our lambda, we need a lambda execution role that has access to secrets manager 
+      - jwt.io has a libraries section which has lots of libraries for all coding languages to validate tokens 
