@@ -9,6 +9,9 @@ using Amazon.Lambda.APIGatewayEvents;
 using Amazon.Lambda.Core;
 using Amazon.S3;
 using Amazon.S3.Model;
+using Amazon.SimpleNotificationService;
+using Amazon.SimpleNotificationService.Model;
+using AutoMapper;
 using HotelManager_HotelAdmin.Models;
 using HttpMultipartParser;
 
@@ -135,6 +138,22 @@ public class HotelAdmin
 
            using var dbContext = new DynamoDBContext(dbClient);
            await dbContext.SaveAsync(hotel);
+
+           var mapperConfig = new AutoMapper.MapperConfiguration(cfg => cfg
+               .CreateMap<Hotel, HotelCreatedEvent>()
+               .ForMember(dest => dest.CreationDateTime, opt => opt.MapFrom(src => DateTime.Now)));
+           var mapper = new Mapper(mapperConfig);
+
+           var hotelCreatedEvent = mapper.Map<Hotel, HotelCreatedEvent>(hotel);
+
+           var snsClient = new AmazonSimpleNotificationServiceClient();
+           var publishResponse = await snsClient.PublishAsync(new PublishRequest
+           {
+               TopicArn = Environment.GetEnvironmentVariable("snsTopicArn"),
+               Message = JsonSerializer.Serialize(hotelCreatedEvent)
+           });
+           
+           publishResponse.MessageId
        }
        catch (Exception e)
        {

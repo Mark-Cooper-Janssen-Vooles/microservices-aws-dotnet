@@ -1,23 +1,29 @@
 {
   "version": 2,
-  "dgSpecHash": "0o2VAZbLaxw1RleElceN6Tg0YOzFElDas4oyy/bL5Ukuox84iZ+JFGBhTyAb1NslgGrBRBeNz1t65MEBPCqL2w==",
+  "dgSpecHash": "PEyjCg7wAmLbqxfY/aBtTR7ie+oHKvvDjTnanin4T6+leaeN07ISRDI1CaVRauKDI0yIeW6nPQDMDY7YzAh1uA==",
   "success": true,
   "projectFilePath": "C:\\dev\\01_learnings\\microservices-aws-dotnet\\HotelManager_HotelAdmin\\HotelManager_HotelAdmin\\HotelManager_HotelAdmin.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\mark.janssen-vooles\\.nuget\\packages\\amazon.lambda.apigatewayevents\\2.7.0\\amazon.lambda.apigatewayevents.2.7.0.nupkg.sha512",
     "C:\\Users\\mark.janssen-vooles\\.nuget\\packages\\amazon.lambda.core\\2.2.0\\amazon.lambda.core.2.2.0.nupkg.sha512",
     "C:\\Users\\mark.janssen-vooles\\.nuget\\packages\\amazon.lambda.serialization.systemtextjson\\2.4.2\\amazon.lambda.serialization.systemtextjson.2.4.2.nupkg.sha512",
-    "C:\\Users\\mark.janssen-vooles\\.nuget\\packages\\awssdk.core\\3.7.303.15\\awssdk.core.3.7.303.15.nupkg.sha512",
+    "C:\\Users\\mark.janssen-vooles\\.nuget\\packages\\automapper\\13.0.1\\automapper.13.0.1.nupkg.sha512",
+    "C:\\Users\\mark.janssen-vooles\\.nuget\\packages\\awssdk.core\\3.7.304.1\\awssdk.core.3.7.304.1.nupkg.sha512",
     "C:\\Users\\mark.janssen-vooles\\.nuget\\packages\\awssdk.dynamodbv2\\3.7.302.16\\awssdk.dynamodbv2.3.7.302.16.nupkg.sha512",
     "C:\\Users\\mark.janssen-vooles\\.nuget\\packages\\awssdk.s3\\3.7.307.16\\awssdk.s3.3.7.307.16.nupkg.sha512",
+    "C:\\Users\\mark.janssen-vooles\\.nuget\\packages\\awssdk.simplenotificationservice\\3.7.301.39\\awssdk.simplenotificationservice.3.7.301.39.nupkg.sha512",
     "C:\\Users\\mark.janssen-vooles\\.nuget\\packages\\httpmultipartparser\\8.4.0\\httpmultipartparser.8.4.0.nupkg.sha512",
+    "C:\\Users\\mark.janssen-vooles\\.nuget\\packages\\microsoft.extensions.dependencyinjection.abstractions\\6.0.0\\microsoft.extensions.dependencyinjection.abstractions.6.0.0.nupkg.sha512",
+    "C:\\Users\\mark.janssen-vooles\\.nuget\\packages\\microsoft.extensions.options\\6.0.0\\microsoft.extensions.options.6.0.0.nupkg.sha512",
+    "C:\\Users\\mark.janssen-vooles\\.nuget\\packages\\microsoft.extensions.primitives\\6.0.0\\microsoft.extensions.primitives.6.0.0.nupkg.sha512",
     "C:\\Users\\mark.janssen-vooles\\.nuget\\packages\\microsoft.identitymodel.abstractions\\7.5.1\\microsoft.identitymodel.abstractions.7.5.1.nupkg.sha512",
     "C:\\Users\\mark.janssen-vooles\\.nuget\\packages\\microsoft.identitymodel.jsonwebtokens\\7.5.1\\microsoft.identitymodel.jsonwebtokens.7.5.1.nupkg.sha512",
     "C:\\Users\\mark.janssen-vooles\\.nuget\\packages\\microsoft.identitymodel.logging\\7.5.1\\microsoft.identitymodel.logging.7.5.1.nupkg.sha512",
     "C:\\Users\\mark.janssen-vooles\\.nuget\\packages\\microsoft.identitymodel.tokens\\7.5.1\\microsoft.identitymodel.tokens.7.5.1.nupkg.sha512",
     "C:\\Users\\mark.janssen-vooles\\.nuget\\packages\\microsoft.io.recyclablememorystream\\3.0.0\\microsoft.io.recyclablememorystream.3.0.0.nupkg.sha512",
     "C:\\Users\\mark.janssen-vooles\\.nuget\\packages\\system.buffers\\4.5.1\\system.buffers.4.5.1.nupkg.sha512",
-    "C:\\Users\\mark.janssen-vooles\\.nuget\\packages\\system.identitymodel.tokens.jwt\\7.5.1\\system.identitymodel.tokens.jwt.7.5.1.nupkg.sha512"
+    "C:\\Users\\mark.janssen-vooles\\.nuget\\packages\\system.identitymodel.tokens.jwt\\7.5.1\\system.identitymodel.tokens.jwt.7.5.1.nupkg.sha512",
+    "C:\\Users\\mark.janssen-vooles\\.nuget\\packages\\system.runtime.compilerservices.unsafe\\6.0.0\\system.runtime.compilerservices.unsafe.6.0.0.nupkg.sha512"
   ],
   "logs": []
 }

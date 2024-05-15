@@ -59,6 +59,10 @@
               "target": "Package",
               "version": "[3.7.307.16, )"
             },
+            "AWSSDK.SimpleNotificationService": {
+              "target": "Package",
+              "version": "[3.7.301.39, )"
+            },
             "Amazon.Lambda.APIGatewayEvents": {
               "target": "Package",
               "version": "[2.7.0, )"
@@ -70,6 +74,10 @@
             "Amazon.Lambda.Serialization.SystemTextJson": {
               "target": "Package",
               "version": "[2.4.2, )"
+            },
+            "AutoMapper": {
+              "target": "Package",
+              "version": "[13.0.1, )"
             },
             "HttpMultipartParser": {
               "target": "Package",

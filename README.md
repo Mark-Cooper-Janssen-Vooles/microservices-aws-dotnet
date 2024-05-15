@@ -34,6 +34,7 @@ Contents:
   - [Command Query Responsibility Segregation - CQRS Pattern](#cqrs-pattern)
   - [Fan Out Pattern and Idempotent Consumer Patterns](#fan-out-pattern-and-idempotent-consumer-patterns)
   - [Update code of AddHotel Lambda to publish an SNS event](#update-code-of-addhotel-lambda-to-publish-an-sns-event)
+  - [Setting up ElasticSearch for Search Microservice](#setting-up-elastic-search-for-search-microservice)
 
 
 ### Local Dev
@@ -704,4 +705,9 @@ public class Authorizer
   - currently it doesn't have access to SNS because its missing in the execution role (add this, just added sns full access)
 
 ### Update code of AddHotel Lambda to publish an SNS event
-- 
+- So far our AddHotel code just adds the hotel to dynamoDB, we want to publish an event to SNS after this (so the consumers know a new hotel has been created)
+- we currently create a Hotel using the Hotel model and send that to dynamoDB, but this is not a good practice for our event. Instead create a HotelCreatedEvent.cs - it will look very similar but without the DynamoDB attribute tags
+  - it looks very similar to hotel, so we can use a mapper. install `automapper`
+- also need to get the nuget package `awssdk.simplenotificationservice`
+
+### Setting up Elastic Search for Search Microservice
