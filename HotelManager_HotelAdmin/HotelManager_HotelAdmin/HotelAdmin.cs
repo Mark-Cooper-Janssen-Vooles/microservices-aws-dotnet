@@ -151,9 +151,7 @@ public class HotelAdmin
            {
                TopicArn = Environment.GetEnvironmentVariable("snsTopicArn"),
                Message = JsonSerializer.Serialize(hotelCreatedEvent)
-           });
-           
-           publishResponse.MessageId
+           });   
        }
        catch (Exception e)
        {

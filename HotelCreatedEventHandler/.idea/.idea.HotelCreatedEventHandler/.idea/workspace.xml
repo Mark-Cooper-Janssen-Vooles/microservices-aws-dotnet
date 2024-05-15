@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="a2309996-5f85-423c-8c42-4f2192af1174" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/HotelCreatedEventHandler/models/Hotel.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../HotelManager_HotelAdmin/HotelManager_HotelAdmin/HotelAdmin.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../HotelManager_HotelAdmin/HotelManager_HotelAdmin/HotelAdmin.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../HotelManager_HotelAdmin/HotelManager_HotelAdmin/bin/Release/net8.0/linux-x64/HotelManager_HotelAdmin.deps.json" beforeDir="false" afterPath="$PROJECT_DIR$/../HotelManager_HotelAdmin/HotelManager_HotelAdmin/bin/Release/net8.0/linux-x64/HotelManager_HotelAdmin.deps.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../HotelManager_HotelAdmin/HotelManager_HotelAdmin/bin/Release/net8.0/linux-x64/HotelManager_HotelAdmin.dll" beforeDir="false" afterPath="$PROJECT_DIR$/../HotelManager_HotelAdmin/HotelManager_HotelAdmin/bin/Release/net8.0/linux-x64/HotelManager_HotelAdmin.dll" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../HotelManager_HotelAdmin/HotelManager_HotelAdmin/bin/Release/net8.0/linux-x64/HotelManager_HotelAdmin.pdb" beforeDir="false" afterPath="$PROJECT_DIR$/../HotelManager_HotelAdmin/HotelManager_HotelAdmin/bin/Release/net8.0/linux-x64/HotelManager_HotelAdmin.pdb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../HotelManager_HotelAdmin/HotelManager_HotelAdmin/bin/Release/net8.0/publish/HotelManager_HotelAdmin.deps.json" beforeDir="false" afterPath="$PROJECT_DIR$/../HotelManager_HotelAdmin/HotelManager_HotelAdmin/bin/Release/net8.0/publish/HotelManager_HotelAdmin.deps.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../HotelManager_HotelAdmin/HotelManager_HotelAdmin/bin/Release/net8.0/publish/HotelManager_HotelAdmin.dll" beforeDir="false" afterPath="$PROJECT_DIR$/../HotelManager_HotelAdmin/HotelManager_HotelAdmin/bin/Release/net8.0/publish/HotelManager_HotelAdmin.dll" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../HotelManager_HotelAdmin/HotelManager_HotelAdmin/bin/Release/net8.0/publish/HotelManager_HotelAdmin.pdb" beforeDir="false" afterPath="$PROJECT_DIR$/../HotelManager_HotelAdmin/HotelManager_HotelAdmin/bin/Release/net8.0/publish/HotelManager_HotelAdmin.pdb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../HotelManager_HotelAdmin/HotelManager_HotelAdmin/obj/Debug/net8.0/HotelManager_HotelAdmin.AssemblyInfo.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../HotelManager_HotelAdmin/HotelManager_HotelAdmin/obj/Debug/net8.0/HotelManager_HotelAdmin.AssemblyInfo.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../HotelManager_HotelAdmin/HotelManager_HotelAdmin/obj/Debug/net8.0/HotelManager_HotelAdmin.AssemblyInfoInputs.cache" beforeDir="false" afterPath="$PROJECT_DIR$/../HotelManager_HotelAdmin/HotelManager_HotelAdmin/obj/Debug/net8.0/HotelManager_HotelAdmin.AssemblyInfoInputs.cache" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../HotelManager_HotelAdmin/HotelManager_HotelAdmin/obj/HotelManager_HotelAdmin.csproj.nuget.dgspec.json" beforeDir="false" afterPath="$PROJECT_DIR$/../HotelManager_HotelAdmin/HotelManager_HotelAdmin/obj/HotelManager_HotelAdmin.csproj.nuget.dgspec.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../HotelManager_HotelAdmin/HotelManager_HotelAdmin/obj/Release/net8.0/linux-x64/HotelManager_HotelAdmin.AssemblyInfo.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../HotelManager_HotelAdmin/HotelManager_HotelAdmin/obj/Release/net8.0/linux-x64/HotelManager_HotelAdmin.AssemblyInfo.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../HotelManager_HotelAdmin/HotelManager_HotelAdmin/obj/Release/net8.0/linux-x64/HotelManager_HotelAdmin.AssemblyInfoInputs.cache" beforeDir="false" afterPath="$PROJECT_DIR$/../HotelManager_HotelAdmin/HotelManager_HotelAdmin/obj/Release/net8.0/linux-x64/HotelManager_HotelAdmin.AssemblyInfoInputs.cache" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../HotelManager_HotelAdmin/HotelManager_HotelAdmin/obj/Release/net8.0/linux-x64/HotelManager_HotelAdmin.assets.cache" beforeDir="false" afterPath="$PROJECT_DIR$/../HotelManager_HotelAdmin/HotelManager_HotelAdmin/obj/Release/net8.0/linux-x64/HotelManager_HotelAdmin.assets.cache" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../HotelManager_HotelAdmin/HotelManager_HotelAdmin/obj/Release/net8.0/linux-x64/HotelManager_HotelAdmin.csproj.AssemblyReference.cache" beforeDir="false" afterPath="$PROJECT_DIR$/../HotelManager_HotelAdmin/HotelManager_HotelAdmin/obj/Release/net8.0/linux-x64/HotelManager_HotelAdmin.csproj.AssemblyReference.cache" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../HotelManager_HotelAdmin/HotelManager_HotelAdmin/obj/Release/net8.0/linux-x64/HotelManager_HotelAdmin.csproj.CoreCompileInputs.cache" beforeDir="false" afterPath="$PROJECT_DIR$/../HotelManager_HotelAdmin/HotelManager_HotelAdmin/obj/Release/net8.0/linux-x64/HotelManager_HotelAdmin.csproj.CoreCompileInputs.cache" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../HotelManager_HotelAdmin/HotelManager_HotelAdmin/obj/Release/net8.0/linux-x64/HotelManager_HotelAdmin.dll" beforeDir="false" afterPath="$PROJECT_DIR$/../HotelManager_HotelAdmin/HotelManager_HotelAdmin/obj/Release/net8.0/linux-x64/HotelManager_HotelAdmin.dll" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../HotelManager_HotelAdmin/HotelManager_HotelAdmin/obj/Release/net8.0/linux-x64/HotelManager_HotelAdmin.pdb" beforeDir="false" afterPath="$PROJECT_DIR$/../HotelManager_HotelAdmin/HotelManager_HotelAdmin/obj/Release/net8.0/linux-x64/HotelManager_HotelAdmin.pdb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../HotelManager_HotelAdmin/HotelManager_HotelAdmin/obj/Release/net8.0/linux-x64/HotelManager_HotelAdmin.sourcelink.json" beforeDir="false" afterPath="$PROJECT_DIR$/../HotelManager_HotelAdmin/HotelManager_HotelAdmin/obj/Release/net8.0/linux-x64/HotelManager_HotelAdmin.sourcelink.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../HotelManager_HotelAdmin/HotelManager_HotelAdmin/obj/Release/net8.0/linux-x64/PublishOutputs.7fd0f5c5fb.txt" beforeDir="false" afterPath="$PROJECT_DIR$/../HotelManager_HotelAdmin/HotelManager_HotelAdmin/obj/Release/net8.0/linux-x64/PublishOutputs.7fd0f5c5fb.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../HotelManager_HotelAdmin/HotelManager_HotelAdmin/obj/Release/net8.0/linux-x64/ref/HotelManager_HotelAdmin.dll" beforeDir="false" afterPath="$PROJECT_DIR$/../HotelManager_HotelAdmin/HotelManager_HotelAdmin/obj/Release/net8.0/linux-x64/ref/HotelManager_HotelAdmin.dll" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../HotelManager_HotelAdmin/HotelManager_HotelAdmin/obj/Release/net8.0/linux-x64/refint/HotelManager_HotelAdmin.dll" beforeDir="false" afterPath="$PROJECT_DIR$/../HotelManager_HotelAdmin/HotelManager_HotelAdmin/obj/Release/net8.0/linux-x64/refint/HotelManager_HotelAdmin.dll" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../HotelManager_HotelAdmin/HotelManager_HotelAdmin/obj/project.assets.json" beforeDir="false" afterPath="$PROJECT_DIR$/../HotelManager_HotelAdmin/HotelManager_HotelAdmin/obj/project.assets.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../HotelManager_HotelAdmin/HotelManager_HotelAdmin/obj/project.nuget.cache" beforeDir="false" afterPath="$PROJECT_DIR$/../HotelManager_HotelAdmin/HotelManager_HotelAdmin/obj/project.nuget.cache" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../README.md" beforeDir="false" afterPath="$PROJECT_DIR$/../README.md" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="KubernetesApiPersistence"><![CDATA[{}]]></component>
+  <component name="KubernetesApiProvider"><![CDATA[{
+  "isMigrated": true
+}]]></component>
+  <component name="ProjectColorInfo"><![CDATA[{
+  "associatedIndex": 3
+}]]></component>
+  <component name="ProjectId" id="2gUc6P8EABBaLtrP3Wv8KdSGi6o" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "vue.rearranger.settings.migration": "true"
+  },
+  "keyToStringList": {
+    "rider.external.source.directories": [
+      "C:\\Users\\mark.janssen-vooles\\AppData\\Roaming\\JetBrains\\Rider2024.1\\resharper-host\\DecompilerCache",
+      "C:\\Users\\mark.janssen-vooles\\AppData\\Roaming\\JetBrains\\Rider2024.1\\resharper-host\\SourcesCache",
+      "C:\\Users\\mark.janssen-vooles\\AppData\\Local\\Symbols\\src"
+    ]
+  }
+}]]></component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="a2309996-5f85-423c-8c42-4f2192af1174" name="Changes" comment="" />
+      <created>1715755421357</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1715755421357</updated>
+      <workItem from="1715755422213" duration="2473000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="UnityProjectConfiguration" hasMinimizedUI="false" />
+  <component name="VcsManagerConfiguration">
+    <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
+  </component>
+</project>

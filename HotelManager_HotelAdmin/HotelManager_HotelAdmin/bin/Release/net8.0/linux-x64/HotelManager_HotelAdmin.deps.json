@@ -11,9 +11,11 @@
         "dependencies": {
           "AWSSDK.DynamoDBv2": "3.7.302.16",
           "AWSSDK.S3": "3.7.307.16",
+          "AWSSDK.SimpleNotificationService": "3.7.301.39",
           "Amazon.Lambda.APIGatewayEvents": "2.7.0",
           "Amazon.Lambda.Core": "2.2.0",
           "Amazon.Lambda.Serialization.SystemTextJson": "2.4.2",
+          "AutoMapper": "13.0.1",
           "HttpMultipartParser": "8.4.0",
           "System.IdentityModel.Tokens.Jwt": "7.5.1"
         },
@@ -48,17 +50,28 @@
           }
         }
       },
-      "AWSSDK.Core/3.7.303.15": {
+      "AutoMapper/13.0.1": {
+        "dependencies": {
+          "Microsoft.Extensions.Options": "6.0.0"
+        },
+        "runtime": {
+          "lib/net6.0/AutoMapper.dll": {
+            "assemblyVersion": "13.0.0.0",
+            "fileVersion": "13.0.1.0"
+          }
+        }
+      },
+      "AWSSDK.Core/3.7.304.1": {
         "runtime": {
           "lib/net8.0/AWSSDK.Core.dll": {
             "assemblyVersion": "3.3.0.0",
-            "fileVersion": "3.7.303.15"
+            "fileVersion": "3.7.304.1"
           }
         }
       },
       "AWSSDK.DynamoDBv2/3.7.302.16": {
         "dependencies": {
-          "AWSSDK.Core": "3.7.303.15"
+          "AWSSDK.Core": "3.7.304.1"
         },
         "runtime": {
           "lib/net8.0/AWSSDK.DynamoDBv2.dll": {
@@ -69,12 +82,23 @@
       },
       "AWSSDK.S3/3.7.307.16": {
         "dependencies": {
-          "AWSSDK.Core": "3.7.303.15"
+          "AWSSDK.Core": "3.7.304.1"
         },
         "runtime": {
           "lib/net8.0/AWSSDK.S3.dll": {
             "assemblyVersion": "3.3.0.0",
             "fileVersion": "3.7.307.16"
+          }
+        }
+      },
+      "AWSSDK.SimpleNotificationService/3.7.301.39": {
+        "dependencies": {
+          "AWSSDK.Core": "3.7.304.1"
+        },
+        "runtime": {
+          "lib/net8.0/AWSSDK.SimpleNotificationService.dll": {
+            "assemblyVersion": "3.3.0.0",
+            "fileVersion": "3.7.301.39"
           }
         }
       },
@@ -87,6 +111,37 @@
           "lib/net7.0/HttpMultipartParser.dll": {
             "assemblyVersion": "8.4.0.0",
             "fileVersion": "8.4.0.0"
+          }
+        }
+      },
+      "Microsoft.Extensions.DependencyInjection.Abstractions/6.0.0": {
+        "runtime": {
+          "lib/net6.0/Microsoft.Extensions.DependencyInjection.Abstractions.dll": {
+            "assemblyVersion": "6.0.0.0",
+            "fileVersion": "6.0.21.52210"
+          }
+        }
+      },
+      "Microsoft.Extensions.Options/6.0.0": {
+        "dependencies": {
+          "Microsoft.Extensions.DependencyInjection.Abstractions": "6.0.0",
+          "Microsoft.Extensions.Primitives": "6.0.0"
+        },
+        "runtime": {
+          "lib/netstandard2.1/Microsoft.Extensions.Options.dll": {
+            "assemblyVersion": "6.0.0.0",
+            "fileVersion": "6.0.21.52210"
+          }
+        }
+      },
+      "Microsoft.Extensions.Primitives/6.0.0": {
+        "dependencies": {
+          "System.Runtime.CompilerServices.Unsafe": "6.0.0"
+        },
+        "runtime": {
+          "lib/net6.0/Microsoft.Extensions.Primitives.dll": {
+            "assemblyVersion": "6.0.0.0",
+            "fileVersion": "6.0.21.52210"
           }
         }
       },
@@ -151,7 +206,8 @@
             "fileVersion": "7.5.1.50405"
           }
         }
-      }
+      },
+      "System.Runtime.CompilerServices.Unsafe/6.0.0": {}
     }
   },
   "libraries": {
@@ -181,12 +237,19 @@
       "path": "amazon.lambda.serialization.systemtextjson/2.4.2",
       "hashPath": "amazon.lambda.serialization.systemtextjson.2.4.2.nupkg.sha512"
     },
-    "AWSSDK.Core/3.7.303.15": {
+    "AutoMapper/13.0.1": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-HvZ4+TZ9Ua42OLIZRBXOh6kLDfTEtRTVH6Lub7fdzNI2NbZOt3OhMYuCvr3ysz6vC/xFw4q2W4DN5LUc+oymgA==",
-      "path": "awssdk.core/3.7.303.15",
-      "hashPath": "awssdk.core.3.7.303.15.nupkg.sha512"
+      "sha512": "sha512-/Fx1SbJ16qS7dU4i604Sle+U9VLX+WSNVJggk6MupKVkYvvBm4XqYaeFuf67diHefHKHs50uQIS2YEDFhPCakQ==",
+      "path": "automapper/13.0.1",
+      "hashPath": "automapper.13.0.1.nupkg.sha512"
+    },
+    "AWSSDK.Core/3.7.304.1": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-O/gyE5ptF5zEc3QDk3JI3+AOgBfRfmg6eLH5z3x7hUPmV1Wxu0V4Fm86FSyT6czRviMmQGY0q0SVMbWRbP4vDA==",
+      "path": "awssdk.core/3.7.304.1",
+      "hashPath": "awssdk.core.3.7.304.1.nupkg.sha512"
     },
     "AWSSDK.DynamoDBv2/3.7.302.16": {
       "type": "package",
@@ -202,12 +265,40 @@
       "path": "awssdk.s3/3.7.307.16",
       "hashPath": "awssdk.s3.3.7.307.16.nupkg.sha512"
     },
+    "AWSSDK.SimpleNotificationService/3.7.301.39": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-KgwjWwdyk6QL48KNkt/7bzZt7y/yzWs3kg0nNeTNfR/FwOpswYC7IlHwbi22wOLT6UA2k79mdn4+IAtzA45dOw==",
+      "path": "awssdk.simplenotificationservice/3.7.301.39",
+      "hashPath": "awssdk.simplenotificationservice.3.7.301.39.nupkg.sha512"
+    },
     "HttpMultipartParser/8.4.0": {
       "type": "package",
       "serviceable": true,
       "sha512": "sha512-vqjwG9OoObxs0+rBYoviMtuF3GyYL3uP/rx06VL1LslWidyBymlqrfb2ZlYrZRMDdNH1wB7hKmq1eJsHKvZF+w==",
       "path": "httpmultipartparser/8.4.0",
       "hashPath": "httpmultipartparser.8.4.0.nupkg.sha512"
+    },
+    "Microsoft.Extensions.DependencyInjection.Abstractions/6.0.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-xlzi2IYREJH3/m6+lUrQlujzX8wDitm4QGnUu6kUXTQAWPuZY8i+ticFJbzfqaetLA6KR/rO6Ew/HuYD+bxifg==",
+      "path": "microsoft.extensions.dependencyinjection.abstractions/6.0.0",
+      "hashPath": "microsoft.extensions.dependencyinjection.abstractions.6.0.0.nupkg.sha512"
+    },
+    "Microsoft.Extensions.Options/6.0.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-dzXN0+V1AyjOe2xcJ86Qbo233KHuLEY0njf/P2Kw8SfJU+d45HNS2ctJdnEnrWbM9Ye2eFgaC5Mj9otRMU6IsQ==",
+      "path": "microsoft.extensions.options/6.0.0",
+      "hashPath": "microsoft.extensions.options.6.0.0.nupkg.sha512"
+    },
+    "Microsoft.Extensions.Primitives/6.0.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-9+PnzmQFfEFNR9J2aDTfJGGupShHjOuGw4VUv+JB044biSHrnmCIMD+mJHmb2H7YryrfBEXDurxQ47gJZdCKNQ==",
+      "path": "microsoft.extensions.primitives/6.0.0",
+      "hashPath": "microsoft.extensions.primitives.6.0.0.nupkg.sha512"
     },
     "Microsoft.IdentityModel.Abstractions/7.5.1": {
       "type": "package",
@@ -257,6 +348,13 @@
       "sha512": "sha512-UUw+E0R73lZLlXgneYIJQxNs1kfbcxjVzw64JQyiwjqCd4HMpAbjn+xRo86QZT84uHq8/MkqvfH82tgjgPzpuw==",
       "path": "system.identitymodel.tokens.jwt/7.5.1",
       "hashPath": "system.identitymodel.tokens.jwt.7.5.1.nupkg.sha512"
+    },
+    "System.Runtime.CompilerServices.Unsafe/6.0.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-/iUeP3tq1S0XdNNoMz5C9twLSrM/TH+qElHkXWaPvuNOt+99G75NrV0OS2EqHx5wMN7popYjpc8oTjC1y16DLg==",
+      "path": "system.runtime.compilerservices.unsafe/6.0.0",
+      "hashPath": "system.runtime.compilerservices.unsafe.6.0.0.nupkg.sha512"
     }
   }
 }

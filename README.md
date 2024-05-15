@@ -36,7 +36,10 @@ Contents:
   - [Update code of AddHotel Lambda to publish an SNS event](#update-code-of-addhotel-lambda-to-publish-an-sns-event)
   - [Setting up ElasticSearch for Search Microservice](#setting-up-elastic-search-for-search-microservice)
   - [Implementing the Idempotent Consumer Pattern](#implementing-the-idempotent-consumer-pattern)
-  
+  - [Subscribing a microservice to Event bus](#subscribing-a-microservice-to-event-bus)
+- [Building Containerised microservices](#building-containerised-microservices)
+  - [Intro to Containerised Microservices](#intro-to-containerised-microservices)
+
 
 
 ### Local Dev
@@ -738,3 +741,78 @@ public class Authorizer
 - go to dynamo, create table, name: hotel-created-event-ids, partition key: eventId, click create table
 
 ### Implementing the Idempotent Consumer Pattern
+- create a lambda that receieves an event from SNS, then impelements Idempotent Consumer Pattern, then sends this event to elasticSearch 
+- create new .net8.0 class project "HotelCreatedEventHandler" 
+- install nuget `amazon.lambda.core`, `amazon.lambda.sns`, `awssdk.dynamodbv2`, `nest` (used for elastic search sdk)
+  - we want to use the dynamodb document model here 
+
+````c#
+public class HotelCreatedEventHandler
+{
+    public async Task Handler(SNSEvent snsEvent)
+    {
+        var dbClient = new AmazonDynamoDBClient();
+        var table = Table.LoadTable(dbClient, "hotel-created-event-ids");
+        
+        // put it in elastic search, we need the endpoint from elastic.co
+        var host = Environment.GetEnvironmentVariable("host");
+        var userName = Environment.GetEnvironmentVariable("userName");
+        var password = Environment.GetEnvironmentVariable("password");
+        // index name in elastic search is like a table name in dynamoDB. one record in elastic search is a 'document'
+        var indexName = Environment.GetEnvironmentVariable("indexName");
+
+        // using the NEST sdk which can connect with elastic search:
+        var connectionSettings = new ConnectionSettings(new Uri(host));
+        connectionSettings.BasicAuthentication(userName, password);
+        connectionSettings.DefaultIndex(indexName);
+        // when we store a model in elastic search, it generates a random id. but we want our id to be used:
+        connectionSettings.DefaultMappingFor<Hotel>(m => m.IdProperty(p => p.Id));
+
+        var elasticSearchClient = new Nest.ElasticClient(connectionSettings);
+        var eventIsNotPresent = !(await elasticSearchClient.Indices.ExistsAsync(indexName)).Exists;
+        if (eventIsNotPresent)
+        {
+            await elasticSearchClient.Indices.CreateAsync(indexName);
+        }
+        
+        foreach (var eventRecord in snsEvent.Records)
+        {
+            var eventId = eventRecord.Sns.MessageId;
+            var foundItem = await table.GetItemAsync(eventId);
+            if (foundItem == null)
+            {
+                await table.PutItemAsync(new Document()
+                {
+                    ["eventId"] = eventId
+                });
+            }
+            
+            // serialize the message we got from SNS to a hotel object
+            var hotel = JsonSerializer.Deserialize<Hotel>(eventRecord.Sns.Message);
+            await elasticSearchClient.IndexDocumentAsync<Hotel>(hotel);
+        }
+    }
+}
+````
+
+- he creates a console app to check this, i didn't do it, may need to watch 41. again if it doesn't work later
+
+- create a new lambda, zip this, attach it, create the environment variables, set the handler correctly 
+  - `HotelCreatedEventHandler::HotelCreatedEventHandler.HotelCreatedEventHandler::Handler`
+  - edit its IAM role to include dynamo full access, lambda execute, lambda basic execution role
+
+### Subscribing a Microservice to Event bus
+- if you go to the SNS topic, select 'subscriptions' tab, create subscription
+- use protocol "aws lambda". you can use email to debug 
+- put the ARN of the lambda as the endpoint 
+- now every time we publish an event to this topic, our HotelCreatedEventHandler should be fired. 
+- go to hotel website, admin page, create a hotel 
+  - go to elastic search / search / elasticSearch indicies / event => you should see something, if so this just fired the AddHotels lambda, (added dynamo and s3 data) then published to the SNS topic, which was then subscribed to by the HotelCreatedEventHandler lambda, which sent this hotel to elasticSearch! Incredible!
+- lets delete all these hotels now so they all go to elastic search (do it in dynamodb)
+
+
+---
+
+## Building Containerised Microservices
+
+### Intro to Containerised Microservices
