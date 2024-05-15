@@ -32,6 +32,8 @@ Contents:
   - [Exploring JWT and JWKS](#exploring-jwt-and-json-web-key-sets-jwks)
   - [Protecting a GET API with Lambda Authorizers](#protecting-a-get-api-with-lambda-authorizers)
   - [Command Query Responsibility Segregation - CQRS Pattern](#cqrs-pattern)
+  - [Fan Out Pattern and Idempotent Consumer Patterns](#fan-out-pattern-and-idempotent-consumer-patterns)
+  - [Update code of AddHotel Lambda to publish an SNS event](#update-code-of-addhotel-lambda-to-publish-an-sns-event)
 
 
 ### Local Dev
@@ -677,3 +679,29 @@ public class Authorizer
   - there is an "updater microservice" which receieves the event and adds it to a read-optimised database (i.e. Elasticsearch)
   - then a user comes to the website and searches for hotels:
     - they search via a new microservcie "Search" which reads from the read-optimised DB.
+
+### Fan out Pattern and Idempotent Consumer Patterns
+- Fan out pattern:
+  - A microservice publishes an event to an Event Bus, such as SNS
+  - The event bus populates the event to MANY subscribing services concurrently 
+  - may cause a problem which is solved by "Idempotent Consumer pattern"
+  - the problem is: a micoservice may receive an event more than once
+    - this could happen as there could be more lambdas cloned (created) to handle load and some sending the same event more than once may happen
+- Idempotent Consumer Pattern:
+  - a microservice must be designed to process the event only once 
+  - achieved by assigning a unique ID to an event 
+  - when a microservice receieves an event, it stores the Event ID in a table 
+  - then the microservice checks the event ID tables before processing an event
+  - AWS SNS messages have a unique "message ID" which we can use for our event ID.
+
+- go to SNS in aws
+- click topics, create topic
+  - to attach a lambda we need the standard type (it has best-effort message ordering, not FIFO)
+    - if we need perfect timing for FIFO, we cannot use a lambda
+  - give it a name: hotel-creation-topic + create topic 
+  - write down the name, the ARN and type 
+- update the addHotel lambda AddHotel
+  - currently it doesn't have access to SNS because its missing in the execution role (add this, just added sns full access)
+
+### Update code of AddHotel Lambda to publish an SNS event
+- 
