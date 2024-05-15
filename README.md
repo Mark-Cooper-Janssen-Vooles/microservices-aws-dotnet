@@ -18,6 +18,20 @@ Contents:
   - creating a mock API with AWS Gateway
   - Authenticating API Requests
 - [Building Serverless Microservices](#building-serverless-microservices)
+  - [Serverless & Containerisation: The Microservice Chassis](#the-concept-of-a-microservice-chassis--servelress--containerisation)
+  - [Creating and deploying AWS Lambda](#creating-and-deploying-an-aws-lambda-microservice)
+  - [Capturing Request Body in AWS Lambda](#capturing-the-request-body-in-aws-lambda-as-an-api-backend)
+  - [Storing Data and files in AWS](#storing-data-and-files-in-aws)
+  - [Create and configure s3 buckets](#create-and-configure-s3-buckets)
+  - [Uploading files and images to s3](#uploading-files-and-images-to-aws-s3)
+  - [Creating and configuring DynamoDB](#creating-and-configuring-a-dynamodb-table)
+  - [Storing info in DynamoDB](#storing-information-in-dynamodb)
+  - [Connecing API Gateway to Lambda via Proxy Resource](#connecting-api-gateway-to-lambda-via-a-proxy-resource)
+  - [Domains and Boundaries](#domains-and-boundaries)
+  - [Creating a Restful GET Api with Lambda](#creating-a-restful-get-api-in-api-gateway-with-a-lambda-microserivce)
+  - [Exploring JWT and JWKS](#exploring-jwt-and-json-web-key-sets-jwks)
+  - [Protecting a GET API with Lambda Authorizers](#protecting-a-get-api-with-lambda-authorizers)
+  - [Command Query Responsibility Segregation - CQRS Pattern](#cqrs-pattern)
 
 
 ### Local Dev
@@ -386,7 +400,7 @@ try
 - do we need a new lambda/microservice for this or can we just add a new method to our existing lambda function? 
   - in OOP we have 'single responsibility principle' - each entity must do only one job. not so simple in microservices... we need to know the domain and the domain boundary.
   - a domain is a specific area of business or application functionality. the limit that separates domains is called the "domain boundary"
-  - we have a entity called HOTEL. an Admin adds,edit,delets hotels. A customer searches for hotel / books. A hotel manager views bookings and approves bookings. 
+  - we have a entity called HOTEL. an Admin adds,edit,deletes hotels. A customer searches for hotel / books. A hotel manager views bookings and approves bookings. 
   - the HOTEL entity means different things to different users, in this case the meaning is the domain, i.e.: admin domain, customer domain, booking management domain
     - i.e. we could have one microservice for ADMIN domain that does get/add/edit/delete of hotels
     - one that does CUSTOMER domain searching/booking 
@@ -514,9 +528,10 @@ https://github.com/aussiearef/MicroservicesWithAWS_Dotnet_HotelMan/blob/main/Hot
 - we've now got a POST (new hotel) and GET (list admin hotels) methods
 - lambda authorisers vs cognito:
   - lambda authorisers are lambda functions: when a client tries to access a resource behind api gateway, api gateway triggers the lambda auth function, and says if the user has the right to access the api or not.
-  - cognito authorisers can only perform authentication, lambda authorisers we can validate the token as well as check if the user has the correct rights (i.e. part of the admin group)
-  - if we want to defer the authorisation completely to API Gateway (and not perform it in the microservice code), lambda authorisers are the way to go.
-    - in the POST method we had a check `if (group == null || group.Value != "Admin")` using cognito, but in this GET we will use a lambda authoriser 
+  - cognito authorisers can only perform authentication, lambda authorisers we can validate the token as well as check if the user has the correct rights (i.e. part of the admin group - authentication AND authorization)
+    - in our POST, the authorization was done in the lambda logic itself in the `AddHotel` method.
+    - if we want to defer the authorisation completely to API Gateway (and not perform it in the microservice code), lambda authorisers are the way to go.
+      - in the POST method we had a check `if (group == null || group.Value != "Admin")` using cognito, but in this GET we will use a lambda authoriser 
 
 - to create a new lambda authoriser in API Gateway, go to the api then click 'authorizers' and 'create authorizer'
   - make it lambda, the token source should be "Authorization" for POST / PUT. we could make it a request instead of a token, i.e. for a GET we could pass the token through a query string called "token". 
@@ -638,3 +653,27 @@ public class Authorizer
   - select the lambda
   - set payload as request, query string, token
   - enable token for 300 
+
+- you can now test this authorizer in API Gateway => listAdminHotels => Authorizers - by using the token (can get the value for it in localstorage, is the bottom one)
+
+### CQRS Pattern
+- Why CQRS? 
+  - The volume (request per second) of read (query) is usually higher than the volume of write (command)
+  - DB technologies for read (query) or write (command) can differ
+  - the ways db's are optimised for reading and writing and different
+  - queries are usually complex and require searching and indexing capabilities
+  - CQRS is useful when the Query needs data to be obtained from multiple sources and be put together
+- Pattern looks like:
+  1. user submits data
+  2. data is sent to a command microservice
+  3. database is updated (i.e. a 'write database' -  tables or event sourcing)
+  4. command microservice pushes an "event" to an event bus (eventual consistency)
+  5. CQRS microservice receives the event and updates the read database
+  6. Query microservice fetches data from the read database 
+- In our case:
+  - user creates hotel (post to HotelAdmin microservice)
+  - HotelAdmin writes this to Hotels DB (dynamo)
+  - hotelAdmin publishes an event to an event or message bus (in AWS its SNS "simple notification service")
+  - there is an "updater microservice" which receieves the event and adds it to a read-optimised database (i.e. Elasticsearch)
+  - then a user comes to the website and searches for hotels:
+    - they search via a new microservcie "Search" which reads from the read-optimised DB.
