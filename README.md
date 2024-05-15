@@ -35,6 +35,8 @@ Contents:
   - [Fan Out Pattern and Idempotent Consumer Patterns](#fan-out-pattern-and-idempotent-consumer-patterns)
   - [Update code of AddHotel Lambda to publish an SNS event](#update-code-of-addhotel-lambda-to-publish-an-sns-event)
   - [Setting up ElasticSearch for Search Microservice](#setting-up-elastic-search-for-search-microservice)
+  - [Implementing the Idempotent Consumer Pattern](#implementing-the-idempotent-consumer-pattern)
+  
 
 
 ### Local Dev
@@ -711,3 +713,28 @@ public class Authorizer
 - also need to get the nuget package `awssdk.simplenotificationservice`
 
 ### Setting up Elastic Search for Search Microservice
+- HotelAdmin AddHotel will send SNS a message / event, of which our Updater Service will subscribe to, and will then send that to Read-optimised DB (Elasticsearch)
+- www.elastic.co
+- once Elastic Search is set up, we will create a Search microservice that will serve the user when trying to find hotels. 
+- in AWS the search service is called Amazon OpenSearch Service, every instance is called 'Domains' 
+
+- go to openSearch service, domains, create a domain
+- name: hotels, choose 'standard create', 'dev/test' for the template, domain without standby, 1 AZ, 
+  - i chose the open search 2.5 for engine
+  - for data nodes i chose general purpose / t3.small.search, 1 node, 10 ebs storage size per node,
+  - make network "public access" to access from your machine to work with it. if its only for production and only other microservices work with it, better to use VPC access
+  - if you dont enable 'fine-grained access control' you need to go to access policy, configure domain level, go to JSON, see its all denied... 
+    - you can fine tune this for production setup 
+  - in our case lets just enable 'fine grained access control' - click create master user to create a user / password (user is elastic)
+  - click create (often takes awhile)
+
+- the elastic search on AWS is very expensive... a free option:
+  - start free trial here: https://www.elastic.co/enterprise-search (unfortunately only 14 days)
+  - choose sydney region, create deployment (takes awhile) 
+  - go to cloud.elastic.co and click manage on the deployment, click "copy endpoint" for elasticsearch 
+  - put that endpoint into the browser, enter user (elastic) / pass - if it works then it means its ready to go
+
+- we also want a new table in dynamodb to store the message ID for idempotency 
+- go to dynamo, create table, name: hotel-created-event-ids, partition key: eventId, click create table
+
+### Implementing the Idempotent Consumer Pattern
