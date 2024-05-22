@@ -40,16 +40,20 @@ Contents:
 - [Building Containerised microservices](#building-containerised-microservices)
   - [Intro to Containerised Microservices](#intro-to-containerised-microservices)
   - [Create the search containerised microservice](#create-the-search-containerised-microservice)
+  - [Creating a docker image](#creating-a-docker-image)
+  - [Push to AWS ECR (Elastic Container Registry)](#push-to-aws-ecr-elastic-container-registry)
 
 
+---
 
 ### Local Dev
 - open IIS, right-click sites and add new website 
-  - specify the path as this repo
+  - specify the path as this repo (the frontEnd folder)
   - bind it as http - localhost - 6060 
 - open up localhost:6060
   - create new user 
 
+---
 
 ## Introduction to Microservices
 
@@ -871,4 +875,19 @@ docker services in AWS
   - this creates a minimal webapi - differently structured than the usual stuff 
 - we can get rid of excess code in program.cs: swagger stuff, httpsRedirection, sample code 
 - need to install `NEST` nuget package
-- 
+
+### Creating a docker image
+- need docker desktop + docker engine installed
+- to dockerise, add dockerfile 
+  - this is in SearchApi/dockerfile
+- to build for linux you don't get an .exe you get a .dll
+- go to folder where the dockerfile is, `docker build -t search-api -f dockerfile .`
+  - once its ready, it will be visible in docker desktop
+  - now we can create containers based on this image, `docker run -p 500:80 -t search-api`, now if we go `docker ps` we should see our image running
+  - go to a browser and try http://localhost:500/search?city=sy&rating=1 - it should work!
+
+- note we had secrets etc hardcoded in our code - we want to put them in env variables like we did for the lambdas. 
+  - rebuild the image, to only have the env variables 
+
+### Push to AWS ECR (Elastic Container Registry)
+

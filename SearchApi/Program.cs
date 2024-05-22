@@ -7,6 +7,10 @@ var app = builder.Build();
 
 app.MapGet("/search", async (string? city, int? rating) =>
 {
+    var host = Environment.GetEnvironmentVariable("host");
+    var userName = Environment.GetEnvironmentVariable("userName");
+    var password = Environment.GetEnvironmentVariable("password");
+    var indexName = Environment.GetEnvironmentVariable("indexName");
 
     var connectionSetting = new ConnectionSettings(new Uri(host));
     connectionSetting.BasicAuthentication(username, password);
