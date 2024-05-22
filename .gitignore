@@ -4,3 +4,5 @@ LambdaAuthorizer/LambdaAuthorizer/bin/**
 LambdaAuthorizer/LambdaAuthorizer/obj/**
 HotelCreatedEventHandler/HotelCreatedEventHandler/bin/**
 HotelCreatedEventHandler/HotelCreatedEventHandler/obj/**
+SearchApi/bin/**
+SearchApi/obj/**

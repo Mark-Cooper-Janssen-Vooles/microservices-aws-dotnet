@@ -866,3 +866,9 @@ docker services in AWS
 - AWS also offer kubernetes as a managed service (not explored here - needs its own course, called EKS in aws)
 
 ### Create the search containerised microservice 
+- we can use a basic web api for this, since we're not limited by lambda 
+- can use the command: `dotnet new webapi -minimal -n SearchApi` 
+  - this creates a minimal webapi - differently structured than the usual stuff 
+- we can get rid of excess code in program.cs: swagger stuff, httpsRedirection, sample code 
+- need to install `NEST` nuget package
+- 
