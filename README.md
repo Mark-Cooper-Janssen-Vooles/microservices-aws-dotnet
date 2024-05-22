@@ -39,6 +39,7 @@ Contents:
   - [Subscribing a microservice to Event bus](#subscribing-a-microservice-to-event-bus)
 - [Building Containerised microservices](#building-containerised-microservices)
   - [Intro to Containerised Microservices](#intro-to-containerised-microservices)
+  - [Create the search containerised microservice](#create-the-search-containerised-microservice)
 
 
 
@@ -816,3 +817,52 @@ public class HotelCreatedEventHandler
 ## Building Containerised Microservices
 
 ### Intro to Containerised Microservices
+- we now can grab the events from SNS and put them in our read-optimised database elasticsearch
+- now we want to work on the search experience for the user
+  - we need a new microservice called "search" which reads it from the elasticservice
+  - create a containerised microservice for "search"
+
+- Benefits of containerised microservices deployment model over serverless deployment model:
+  - containerization is a method of deploying the service in a lightweight, portable environment called a container
+  - container includes the OS / app / all required software => runs consistently across different computing environments (mac and windows i.e.)
+  - compared to deploying a microservice in a traditional way i.e. onto a server (i.e. ec2 instance), they offer: scalability, agility, resilience, portability, visibility
+  - Benefits over serverless model:
+    - deployed to any cloud provider or on a local server (on premisis) with no charge, as long as the host supports docker
+    - complete control over the execution environment 
+    - better integration with legacy systems - especially ones not on the cloud
+    - you will not be limited to the programming languages offered by aws lambda etc
+
+- docker did not invent virtualization but popularised it 
+- the content of a container is saved into a file called an image, which makes portability and re-deployments possible 
+- a docker container is the realization of a docker image 
+
+- in a high level, the containerisation looks like this:
+  - host operation system (i.e. linux, windows etc)
+  - on top of this, we have the docker engine 
+  - on top of these, we have our microservice containers 
+- the docker image has the OS, utilities, code artifacts
+- we create instances of the docker images and we have multiple containers (for scalability and availability)
+  - we can use a container management system for this: docker desktop, AWS ECS, kubernetes are examples 
+- we can host / maintain docker images at the container registry. examples: hub.docker.com, mcr.microsoft.com, aws ECR (basically github for the images)
+
+
+create a docker image:
+- write code in any desired programming language
+- publish the code artifact (i.e. dotnet binary files) into a folder
+- build for linux x64 - docker uses linux. we can run windows for some use-cases but best to stick with linux. 
+- create a file called 'dockerfile' (no extension) - say what base image we need etc, code artifacts to be copied into it etc.
+- install docker on your computer (or ci/cd environment) for local dev
+- use "docker build" command to create image 
+- you can now create containers of the image locally (using docker desktop)
+- should now be ready to deploy to the desired environment 
+
+docker services in AWS 
+- AWS Elastic container service (ECS)
+- ECS has two two deployment models:
+  - fargate launch type (fully managed by aws) - also has two deployment models
+    - task: short-lived, small and stateless containers. good for microservices.
+    - service: long-lived, stateful and larger containers. good for larger web apps.
+  - ec2 launch type (managed by you and aws) - better for high load, takes longer to set up
+- AWS also offer kubernetes as a managed service (not explored here - needs its own course, called EKS in aws)
+
+### Create the search containerised microservice 

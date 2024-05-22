@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "f7jpasiNYdVBnSovGdhns0febBjPJZpCKdnNjiJnHhqFEwb9O6xsqzaXf3eO8SUGkFmfd5/VpCYC9u2loMGtLw==",
+  "dgSpecHash": "PEyjCg7wAmLbqxfY/aBtTR7ie+oHKvvDjTnanin4T6+leaeN07ISRDI1CaVRauKDI0yIeW6nPQDMDY7YzAh1uA==",
   "success": true,
   "projectFilePath": "C:\\dev\\01_learnings\\microservices-aws-dotnet\\HotelManager_HotelAdmin\\HotelManager_HotelAdmin\\HotelManager_HotelAdmin.csproj",
   "expectedPackageFiles": [
