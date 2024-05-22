@@ -42,6 +42,7 @@ Contents:
   - [Create the search containerised microservice](#create-the-search-containerised-microservice)
   - [Creating a docker image](#creating-a-docker-image)
   - [Push to AWS ECR (Elastic Container Registry)](#push-to-aws-ecr-elastic-container-registry)
+  - [Deploying to AWS ECS (Elastic Container Service)](#deploying-to-aws-ecs-elastic-container-service)
 
 
 ---
@@ -890,4 +891,18 @@ docker services in AWS
   - rebuild the image, to only have the env variables 
 
 ### Push to AWS ECR (Elastic Container Registry)
+- we need to push a container to ECR first so we can create a container out of it in ECS
+  - elastic container registry, elastic container service 
+- go to ECR: 
+  - create a repository, named it "mycompany"
+  - to push from local machine, we need to create a local credentials setup 
+    - needed to use aws tools with powershell
+    - something like: `(Get-ECRLoginCommand -Region "ap-southeast-2" --ProfileName "<profile-from-credentials>").Password | docker login --username AWS --password-stdin <number from ecr>.dkr.ecr.ap-southeast-2.amazonaws.com`
+    - we already created the image, but here you would create the image
+    - to push to any repository, we need to tag it. generally it specifies the version of the image. something like:
+    `docker tag <name of image>:latest <number from ecr>.dkr.ecr.ap-southeast-2.amazonaws.com/mycompany:latest` => latest is the tag (its the default tag)
+    - the last command pushes it `docker push <number from ecr>.dkr.ecr.ap-southeast-2.amazonaws.com/mycompany:latest`
+      - when its pushed, after we refresh we'll see an image there
+
+### Deploying to AWS ECS (Elastic Container Service)
 

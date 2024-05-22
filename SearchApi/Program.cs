@@ -13,7 +13,7 @@ app.MapGet("/search", async (string? city, int? rating) =>
     var indexName = Environment.GetEnvironmentVariable("indexName");
 
     var connectionSetting = new ConnectionSettings(new Uri(host));
-    connectionSetting.BasicAuthentication(username, password);
+    connectionSetting.BasicAuthentication(userName, password);
     connectionSetting.DefaultIndex(indexName);
     connectionSetting.DefaultMappingFor<Hotel>(m => m.IdProperty(p => p.Id));
     var client = new ElasticClient(connectionSetting);
