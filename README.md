@@ -966,7 +966,6 @@ NOTE: if need to redeploy this, follow these steps
   - go back to resources, create method, make it GET, this time select "http integration type", select http proxy integration, http method is GET, endpoint url was our public IP of the ecs task with "http://" in front, click create
   - now click create resource, select proxy resource, resource name "search" and "{search+}", integration 
   - now we need to set up the integration request settings, its http GEt with the endpoint url now set to http://54.252.246.250/{search}
-    - NOTE: will this need this "{search}"? unsure.. 
   - in method request change authorisation to customAuthorizer, add url query string as "token", "city", "rating", make them required
   - now deploy - use new Stage and name it "Test"
   - look for the invoke URL (its the GET inside /{search+}) 
@@ -974,8 +973,41 @@ NOTE: if need to redeploy this, follow these steps
     - `https://q6xzshhd08.execute-api.ap-southeast-2.amazonaws.com/Test/search?city=&rating=1&token=<token>` - look for token in the local storage
 
 ### Creating an API for a containerised microservice with a private IP
+- previously we set our microservice using a public IP 
+  - we want to use a private IP in prod, and only expose the API Gateway IP (for auth)
+  - he grabs the private IP from the ecs task, puts that in the first GET of the api gateway and also the proxy integration request, then redeploy.
+  - this however creates an "internal server error" when hitting the API
 
+- API Gateway with private resources:
+- resources in AWS are deployed in our VPC 
+  - we have subnets inside these, i.e. a public subnet, we have our ECS task inside the public subnet. the ECS Task is available to have a public IP if there is an internet gateway 
+  - there is also an AWS SErvices network (api gateway, s3, etc) - these do not exist in your VPC. this is like a VPC for AWS itself. the AWS services network has its own internet gateway, which is why it can access our public IP. 
+  -  this is why private IP didn't work.
+- to bridge this gap, we need to create a "network load balancer" 
+  - they have target groups behind them where we can register our private IP
+  - NLB forwards the traffic to the target group, which forwards it to our ECS Task
+  - API Gateway has a VPC link (we use this instead of HTTP integration type)
+  - VPC link forwards the link to our network load balancer
 
+- in ECS, for a NLB we need a healthy health check status
+  - in our task definition, create a revision, scroll to health check, add the command: `CMD-SHELL, curl -f http://localhost/search?city=syd&rating=1 || exit 1` then hit create
+  - we now need to redeploy: make sure to pick the right security group (search-api-sg) and get rid of the non-public subnets, hit create 
+  - when our task is provisioned, it should have a health status as healthy. we can stop the old one. note the IP changes with the new task. grab the new IP
+- now go to EC2, we want to create a target group and attach it to a load balancer.
+    - create target group, type is "IP addresses", name: "search-target-group", use port 80, we want NLB so it needs TCP (not http), hit next
+    - put our IPv4 address as our ECS task private ip, click "include as pending below", create target group
+    - go to load balancer tab, create load balancer, choose NLB, name: search-load-balancer. make the scheme internal, choose the right VPC and subnets (the subnet used in the ECS task), in "listeners and routing" choose target group as search-target-group, hit create
+    - when its provisionedl click on its name and get its DNS name + copy it 
+- go back to API Gateway, create VPC link
+  - VPC link for REST apis: add name 'vpc-link-for-search', choose target nlb 'search-load-balancer', click create
+  - now go back to resources / search. 
+  - once you create a link via VPC link, we no longer need the proxy. we can ddlete it. 
+  - now go to the GET integration request and change the tpye to VPC link, use proxy integration, method GET, choose VPC link and use the DNS of the network load balancer: `http://search-load-balancer-<number>.elb.ap-southeast-2.amazonaws.com/search` => we need to add the /search, save + deploy 
+
+^ a lot of faffing around. currently it works at: 
+http://13.55.34.119/search?city=&rating=1 
+
+maybe just go with this for now. otherwise re-watch lecture 50. 
 
 ---
 
