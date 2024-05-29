@@ -43,6 +43,7 @@ Contents:
   - [Creating a docker image](#creating-a-docker-image)
   - [Push to AWS ECR (Elastic Container Registry)](#push-to-aws-ecr-elastic-container-registry)
   - [Deploying to AWS ECS (Elastic Container Service)](#deploying-to-aws-ecs-elastic-container-service)
+  - [Creating a Proxy API for a containerised microservice](#creating-a-proxy-api-for-a-containerised-microservice)
 
 
 ---
@@ -904,5 +905,58 @@ docker services in AWS
     - the last command pushes it `docker push <number from ecr>.dkr.ecr.ap-southeast-2.amazonaws.com/mycompany:latest`
       - when its pushed, after we refresh we'll see an image there
 
-### Deploying to AWS ECS (Elastic Container Service)
 
+
+### Deploying to AWS ECS (Elastic Container Service)
+- go to ECS and creat cluster
+- cluser name: search-microservice-cluster, use fargate
+  - creates an empty cluster
+  - click refresh then click into cluster
+- two ways of creating clusters: 
+  - a task (short lived - doesn't maintain session / cache)
+  - service (group of tasks - longer lived, can be stateful)
+- create a task, but we need a task definition first (on left side)
+  - create one, name: search-microservice-task-definition
+  - choose Linux/x86_64
+  - chose 0.25vCPU  memory of 0.5gb
+  - in terms of role, we don't actually need anything because we're using elasticSearch (no AWS services)
+  - container: name = search, image uri: what we copied from the ECR  
+  - it exposes port 80 as we set it up
+  - we dont need to set up HTTPS (we'll use api gateway, microservices will usually not use HTTPS)
+  - if we have a handful of secrets, env variables a perfect. if more complex, may want to use param store 
+    - set env variables
+  - now click create, and we've made the task definition
+
+
+- now we can go back to our clusters, click the tasks tab, run new task, use launch type so AWS takes care of it all
+  - in the family drop-down choose the task
+  - go to networking, just have one public subnet (any issues here?)
+  - choose correct security group: create a new one, called search-api-sg
+    - inbound is http  / TCP / 80 / anywhere for source
+  - make sure public IP is turned on (you wouldn't do this for PROD - our API gateway will route the traffic eventually this is just for now)
+  - then create, it takes awhile 
+- once created you can go into the task, see the public url and hit the url with /search?city=syd on the end - it should work 
+
+
+NOTE: if need to redeploy this, follow these steps
+- first make code change
+- next, rebuild docker image: `docker build -t search-api -f dockerfile .`
+- tag new docker image `docker tag search-api:latest 534833720216.dkr.ecr.ap-southeast-2.amazonaws.com/mycompany:latest`
+- get authenticated to the docker client in ECR:
+  - `(Get-ECRLoginCommand -Region "ap-southeast-2" -ProfileName "mark-todolendar").Password | docker login --username AWS --password-stdin 534833720216.dkr.ecr.ap-southeast-2.amazonaws.com`
+- push to ECR: `docker push 534833720216.dkr.ecr.ap-southeast-2.amazonaws.com/mycompany:latest`
+
+- now we can go back to our clusters, click the tasks tab, delete existing task then create new, use launch type so AWS takes care of it all
+  - in the family drop-down choose the task
+  - go to networking, just have one public subnet (any issues here?)
+  - choose correct security group: create a new one, called search-api-sg
+    - inbound is http  / TCP / 80 / anywhere for source
+  - make sure public IP is turned on (you wouldn't do this for PROD - our API gateway will route the traffic eventually this is just for now)
+  - then create, it takes awhile 
+- once created you can go into the task, see the public url and hit the url with /search?city=syd on the end - it should work 
+
+### Creating a Proxy API for a containerised microservice
+
+---
+
+ongoing miro board: https://miro.com/app/board/uXjVKCa1QSc=/
