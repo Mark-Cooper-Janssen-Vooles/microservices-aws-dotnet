@@ -44,6 +44,7 @@ Contents:
   - [Push to AWS ECR (Elastic Container Registry)](#push-to-aws-ecr-elastic-container-registry)
   - [Deploying to AWS ECS (Elastic Container Service)](#deploying-to-aws-ecs-elastic-container-service)
   - [Creating a Proxy API for a containerised microservice](#creating-a-proxy-api-for-a-containerised-microservice)
+  - [Creating an API for a containerised microservice with a private IP](#creating-an-api-for-a-containerised-microservice-with-a-private-ip)
 
 
 ---
@@ -956,6 +957,25 @@ NOTE: if need to redeploy this, follow these steps
 - once created you can go into the task, see the public url and hit the url with /search?city=syd on the end - it should work 
 
 ### Creating a Proxy API for a containerised microservice
+- its not a good idea to let clients directly connect to the microservice
+- we want a proxy in API gateway to handle this request 
+  - copy public ip of the ecs task 
+  - go to api gateway, create api, rest api
+  - name: search
+  - create an authorizer: customAuthorizer, lambda, select hotellambdaAuthoriser, lambda event payload is request, identity sources is query string as "token" (we used this previously for the other api)
+  - go back to resources, create method, make it GET, this time select "http integration type", select http proxy integration, http method is GET, endpoint url was our public IP of the ecs task with "http://" in front, click create
+  - now click create resource, select proxy resource, resource name "search" and "{search+}", integration 
+  - now we need to set up the integration request settings, its http GEt with the endpoint url now set to http://54.252.246.250/{search}
+    - NOTE: will this need this "{search}"? unsure.. 
+  - in method request change authorisation to customAuthorizer, add url query string as "token", "city", "rating", make them required
+  - now deploy - use new Stage and name it "Test"
+  - look for the invoke URL (its the GET inside /{search+}) 
+    - i.e. `https://q6xzshhd08.execute-api.ap-southeast-2.amazonaws.com/Test/{search+}` but when you put it in the browser it should look like: 
+    - `https://q6xzshhd08.execute-api.ap-southeast-2.amazonaws.com/Test/search?city=&rating=1&token=<token>` - look for token in the local storage
+
+### Creating an API for a containerised microservice with a private IP
+
+
 
 ---
 
