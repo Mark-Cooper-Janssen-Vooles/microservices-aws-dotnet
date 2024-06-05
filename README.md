@@ -45,6 +45,9 @@ Contents:
   - [Deploying to AWS ECS (Elastic Container Service)](#deploying-to-aws-ecs-elastic-container-service)
   - [Creating a Proxy API for a containerised microservice](#creating-a-proxy-api-for-a-containerised-microservice)
   - [Creating an API for a containerised microservice with a private IP](#creating-an-api-for-a-containerised-microservice-with-a-private-ip)
+- [The Event Sourcing Pattern for Ultimate System Resiliancy (hotel booking!)](#the-event-sourcing-pattern-for-ultimate-system-resiliancy)
+  - [Event Sourcing microservice](#event-sourcing-microservice)
+  - [booking microservice](#booking-microservice)
 
 
 ---
@@ -1005,7 +1008,7 @@ NOTE: if need to redeploy this, follow these steps
   - now go to the GET integration request and change the tpye to VPC link, use proxy integration, method GET, choose VPC link and use the DNS of the network load balancer: `http://search-load-balancer-<number>.elb.ap-southeast-2.amazonaws.com/search` => we need to add the /search, save + deploy 
 
 ^ a lot of faffing around. currently it works at: 
-http://13.55.34.119/search?city=&rating=1 
+http://13.55.34.119/search?city=&rating=1  => went dead as elastic search expired
 
 maybe just go with this for now. otherwise re-watch lecture 50. 
 
@@ -1058,8 +1061,33 @@ app.MapGet("/search", async (string? city, int? rating) =>
     return result;
 });
 ````
+---
 
+## The Event Sourcing Pattern for Ultimate System Resiliancy
+- Now building the hotel booking / "ordering" capability / domain
+- http://localhost:6060/hotel/book.html
+- the search page has a "book now" button... hmm
 
+- when a user books a hotel they will call the "order service" with: hotel id, user id token, when booking will start / how many nights (check-in, check-out dates). we wont send info about name or price of hotel, it opens it to forgery attacks
+  - we will need the hotel / price of hotel info in the order domain. we don't have this info in the "orders dynamoDB".
+  - one way would be to call the hotel dynamoDB table, this is the easiest way in coding but it crosses the domain boundary as the hotel DB is in the hotel admin domain. 
+  - since the teams are formed around different domains, this is not good practice. since we have the SNS topic, we can use a lambda to listen to that and update our own hotel DB table (within the order domain)
+  - "every domain needs whatever it needs to operate independently" 
+  - increases the resilience of the microservices based system 
+
+- we'll subscribe using an updater lambda to the SNS topic and store it in our order domain hotel dynamodb table
+- the order service can pull from both the 'orders dynamodb' and the 'hotel dynamodb' now. 
+- the order service will have two microservices: one for command one for query
+
+### Event Sourcing microservice 
+- this is what will listen to the SNS topic
+- a clone of the search one, except modified to work with dynamo instead of elastic search. here in "HotelCreatedEventHandlerOrdering"
+- run `dotnet lambda package HotelCreatedEventHandler.csproj -o HotelCreatedEventHandlerOrdering.zip` 
+- make a new aws lambda, upload it. same as existing one basically
+  - make a new SNS subscription to the existing topic 
+- make a new table in dynamodb "Hotels_Order_Domain"
+
+### Booking Microservice 
 
 ---
 

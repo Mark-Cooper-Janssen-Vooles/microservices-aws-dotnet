@@ -49,18 +49,6 @@ async Task<List<Hotel>> SearchHotels(string? city, int? rating)
     var userName = Environment.GetEnvironmentVariable("userName");
     var password = Environment.GetEnvironmentVariable("password");
     var indexName = Environment.GetEnvironmentVariable("indexName");
-    
-    Console.Write("=====env strings below=====");
-    // var environmentVariables = Environment.GetEnvironmentVariables();
-    // foreach (DictionaryEntry env in environmentVariables)
-    // {
-    //     Console.WriteLine($"{env.Key}: {env.Value}");
-    // }
-    // Console.WriteLine($"host: {host}");
-    // Console.WriteLine($"userName: {userName}");
-    // Console.WriteLine($"password: {password}");
-    // Console.WriteLine($"indexName: {indexName}");
-    Console.Write("============================");
 
     var connectionSetting = new ConnectionSettings(new Uri(host));
     connectionSetting.BasicAuthentication(userName, password);
