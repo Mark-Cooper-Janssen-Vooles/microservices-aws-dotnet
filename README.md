@@ -1009,6 +1009,58 @@ http://13.55.34.119/search?city=&rating=1
 
 maybe just go with this for now. otherwise re-watch lecture 50. 
 
+### Search Microservice in action
+- sign in and go to http://localhost:6060/hotel/search.html
+- NOTE: this stopped working because elsatic search expired. it says $260 per month estimated cost... will just leave it for now!
+
+### Circuit Breaker Pattern
+- aims to improve the resilience of a microservice-based application
+- useful when faults or errors are temporary and go away after awhile
+  - i.e. our microservice receieves so many requests and puts too much load on a DB, that DB may stop responding. it will go away when the load goes away, so we 'break the circuit' to stop requests coming in. 
+  - based on an electric circuit breaker that trips the power supply
+- Three states:
+  - closed: system is healthy
+  - open: system is faulty
+  - half-open: limited number of requests are processed
+- a pattern might be that the backend sees that a DB isn't working, activates the circuit breaker, then sends that message back to the UI. The UI then gets that and displays a "website is busy come back in a few minutes" message 
+
+- To do this in our search API, install `Polly` (suggested by microsoft)
+````c#
+var circuitBreakerPolicy = Polly.Policy<List<Hotel>>
+    .Handle<Exception>()
+    .CircuitBreakerAsync(handledEventsAllowedBeforeBreaking: 3, TimeSpan.FromSeconds(30)); // when circuit is open, it is so for 30 seconds
+
+app.MapGet("/search", async (string? city, int? rating) =>
+{
+    var result = new HttpResponseMessage();
+
+    try
+    {
+        var hotels = circuitBreakerPolicy.ExecuteAsync(async () => { return await SearchHotels(city, rating); });
+
+        result.StatusCode = HttpStatusCode.OK;
+        result.Content = new StringContent(JsonSerializer.Serialize(hotels));
+        result.Content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+
+        return result;
+    }
+    catch (BrokenCircuitException e)
+    {
+        result.StatusCode = HttpStatusCode.NotAcceptable; // frontend needs to know this to show a specific message
+        result.ReasonPhrase = "Circuit is OPEN";
+    }
+    catch (Exception e)
+    {
+        Console.WriteLine(e);
+        throw;
+    }
+
+    return result;
+});
+````
+
+
+
 ---
 
 ongoing miro board: https://miro.com/app/board/uXjVKCa1QSc=/
