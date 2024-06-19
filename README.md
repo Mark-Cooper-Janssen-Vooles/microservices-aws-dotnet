@@ -427,7 +427,7 @@ try
   - to improve scalability / performance, we pay need to break a microservice down further forever. and if a domain is quite large.
 - "Each microservice is designed to handle a specific business capability"
 - "Domain boundary separates one microservice from another and ensures each microservice is responsible for a specific set of business capabilities"
-- By defining clear domain boundaries, microservices can be independently developed / deloped / scaled which improves the agility and scalability of the overall system
+- By defining clear domain boundaries, microservices can be independently developed / developed / scaled which improves the agility and scalability of the overall system
 
 - given the above, we'll add the GET to our existing microservice.
 
@@ -1087,7 +1087,38 @@ app.MapGet("/search", async (string? city, int? rating) =>
   - make a new SNS subscription to the existing topic 
 - make a new table in dynamodb "Hotels_Order_Domain"
 
-### Booking Microservice 
+### Booking Microservice - Command 
+- we want to create both query and command services
+- Booking.Command "/book" => checks the id token, then stores a booking DTO to dynamoDB
+
+### Deploying a Containerized microservice with AWS Fargate Service Model
+- for searchApi we created a task, this time we'll create a service in ECS
+- use launch type as fargate 
+- we have load balancing in fargate, we can attach an application load balancer
+- once its running, we'll see one task running (the advantage now that we can scale it up using the fargate way)
+
+### Creating and Securing a HTTP API in AWS API Gateway
+- using an HTTP api (as opposed to a rest API) we need to give it an integration, either lambda or HTTP. choose HTTP - put the url in (we need the /book in there)
+- configure stages
+- create
+- we can attach authorisation to our any route 
+- need to enable CORS
+
+### Building a Query microservice with Docker and ECS
+- this microservice returns the users booking (to the user) or to the admin all bookings
+
+### Service Discovery Pattern and AWS Cloud Map
+- we want to deploy this differently to learn about 'service discovery pattern' 
+- we're serving both normal users and admin users within the same microservice, but these are two different domains 
+  - if we work from a greenfield project, we can do a perfect design (i.e. with events). but if we work with something that is older, this isn't necessarily possible
+  - if for example our code is old and our hotelManager user is forced to call our Booking.Query service's elastic load balancer (which is only supposed to serve customers), we can replace the elastic load balancer with "AWS Cloud Map" which uses the service discovery pattern
+    - with service discovery, every microservice just registers itself when it comes to life
+    - we can then use either API Gateway to find that service in AWS CloudMap, or tell the other service to call CloudMap directly. 
+
+- cloud Map has "namespaces" - every namespace represents one domain. Similar to ECS, every cluster represents one domain. if you deploy to ECS, the namespaces are created automatically. we'll deploy the booking microservice to ECS which also deploys it into CloudMap. 
+
+### Deploying a microservice to ECS and CloudMap
+
 
 ---
 
