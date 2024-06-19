@@ -1118,7 +1118,21 @@ app.MapGet("/search", async (string? city, int? rating) =>
 - cloud Map has "namespaces" - every namespace represents one domain. Similar to ECS, every cluster represents one domain. if you deploy to ECS, the namespaces are created automatically. we'll deploy the booking microservice to ECS which also deploys it into CloudMap. 
 
 ### Deploying a microservice to ECS and CloudMap
+- upload image to ECR
+- set up ECS in service connect - Client And Service
+- add port mapping as usual
 
+### Creating a HTTP API in AWS Api Gateway and AWS Cloud Map
+- in api gateway create a VPC link
+- create http api, booking-query-api
+- create a default rout /query as ANY
+- define an integration for that route, use private resource for the integration type
+- choose manually and cloud map as the target service
+- allow all CORS
+- create an authoriser 
+
+### View and Confirm Hotel Bookings
+- 
 
 ---
 
