@@ -57,7 +57,8 @@ Contents:
 - [The Saga Pattern](#the-saga-pattern)
   - [Why message-oriented architecture?](#why-message-oriented-architecture)
 - [Event Streaming Platforms: Apache Kafka, AWS MSK](#event-streaming-platforms-apache-kafka-aws-msk)
-
+  - [What problem does event streaming solve?](#what-problem-does-event-streaming-solve)
+- [Message Oriented Microservices with RabbitMQ](#message-oriented-microservices-with-rabbitmq)
 
 ---
 
@@ -1335,7 +1336,32 @@ options for shipping logs to the log storage
   - comes with Kinesis Firehose for sending data to other destinations
 
 ### What problem does event streaming solve? 
+- if we have a microservice architecture with shipping service and inventory service:
+  - if shipping service ships a pair of shoes, it needs to update the database to have less shoes. however we want to split these domains up: so either it calls the inventory db directly (bad as it crosses the domain) or it emits an event which the inventory service is subscribed to, then the inventory service updates its own db. 
+- 
+
+
+### Installing and using Kafka 
+- a kafka cluster has one or more "brokers": each broker is one instance of kafka which runs on the server
+  - the brokers need to be kept in sync with each other, done by "Apache zoo keeper" via port 2181 
+  - client (i.e. our machine) talks to the cluster via port 9092 (plain text, it might change) 
+- in aws there is the managed service for kafka MSK 
+  - can create a cluster easily however it can only be used in the VPC which it presides on (i.e. through an ec2 - so not the best to learn on)
+- instead he uses docker desktop
+
+### Connecting to Kafka via Dotnet 
+- in kafka we produce an event and consume an event
 
 ---
+
+## Message Oriented Microservices with RabbitMQ
+- if our microservices are not lambda, i.e. we have containerised microservices, in that case we have other options i.e. RabbitMQ (dotnet popularity), Apache ActiveMQ (java popularity)
+- the reason why AWS introduced these as managed services was to help companies migrate their legacy data centres to the cloud 
+- in rabbitMQ we have our app and a rabbitMQ server. between them is a AMQP Connection - this is a custom rabbitMQ protocol (tcp)
+- the app creates only one connection but it can create several channels between the app and rabbitMQ 
+
+
+---
+start the interview q's introduction
 
 ongoing miro board: https://miro.com/app/board/uXjVKCa1QSc=/
