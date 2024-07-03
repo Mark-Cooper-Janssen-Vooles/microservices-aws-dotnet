@@ -55,7 +55,7 @@ Contents:
 - [Logging for Microservices](#logging-for-microservices)
   - [Logging Solutions in AWS](#logging-solutions-in-aws)
 - [The Saga Pattern](#the-saga-pattern)
-  - 
+  - [Why message-oriented architecture?](#why-message-oriented-architecture)
 
 
 ---
@@ -1245,6 +1245,28 @@ options for shipping logs to the log storage
 ---
 
 ## The Saga Pattern
+- event driven microservices
+- events vs messages:
+  - messages are used to send commands
+  - events notify of something that has happened already
+    - i.e. we store some data in a db, then we can raise an event to let other microservices know that something has happened 
+- message and event example
+  - system has payment service, order service and communication service
+  - payment is done, it lets order service know its OK and sends some info (raises payment OK 'event'). order service then lets communication service know something (send invoice 'message')
+  - payment service and order service don't talk to each other or that creates dependencies between services. 
+    - to avoid this we publish events to an "event streaming" platform - payment OK 'event'.
+    - now to send the message from Order Service to Communication service, its a message so we use a "message broker", i.e. SNS is a message broker
+
+- Events: "event streaming platform"
+  - designed for ingesting, storing and processing large volumes of event data in real-time
+  - handles the continuous flow of event data in real-time, high throughput per second, events are stored in a durable log. used for real-time analytics etc. 
+  - examples: Apache Kafka, Kinesis 
+- Messages: "message broker"
+  - designed for broadcasting messages to multiple recipients and integrating distributed systems
+  - software intermediary that enables communication between different apps by translating messages bewtween them. decoupling, message routing, reliable delivery of messages
+  - examples: integration between heterogeneous systems (i.e. different domains), task queues, notification systems 
+
+### Why message-oriented Architecture?
 
 ---
 
