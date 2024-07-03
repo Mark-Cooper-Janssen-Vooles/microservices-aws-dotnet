@@ -8,3 +8,11 @@ SearchApi/bin/**
 SearchApi/obj/**
 HotelCreatedEventHandlerOrdering/HotelCreatedEventHandler/bin/**
 HotelCreatedEventHandlerOrdering/HotelCreatedEventHandler/obj/**
+BookingReview/BookingReview/bin/**
+BookingReview/BookingReview/obj/**
+BookingService/BookingService.Command/bin/**
+BookingService/BookingService.Command/obj/**
+BookingService/BookingService.Query/bin/**
+BookingService/BookingService.Query/obj/**
+ReviewBooking-Sidecar/ReviewBooking-Sidecar/bin/**
+ReviewBooking-Sidecar/ReviewBooking-Sidecar/obj/**

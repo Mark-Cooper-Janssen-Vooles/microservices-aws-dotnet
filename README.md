@@ -51,6 +51,8 @@ Contents:
   - [Event Sourcing microservice](#event-sourcing-microservice)
   - [booking microservice](#booking-microservice)
   - [Creating the review booking microservice](#creating-the-review-booking-microservice)
+  - [The Sidecar Pattern](#the-sidecar-pattern)
+- [Logging for Microservices](#logging-for-microservices)
 
 
 ---
@@ -1141,8 +1143,36 @@ app.MapGet("/search", async (string? city, int? rating) =>
 - bookings page uses query api (with param of booking set to draft)
 
 ### Creating the review booking microservice
+- this makes sends off an sns event channging the booking type from pending to approved 
+
 - bookingReview (in folders) 
-- 
+- doesn't use fargate, this time use app environment using EC2 Instances (EC2 Launch Type)
+- chooses linux/x86_64
+- network mode: depends in if your vpc is public or private (private use awsvpc, public use bridge)
+- for setting the ASG, you need amazon linux 2023 and c3.2xlarge as the EC2 instance type - they need to be large enough to host the OS etc not just your app
+  - he says its a resource intensive approach using ec2 instances instead of just fargate 
+- need to add sns policy to role as we're pushing to sns 
+
+- creating the api: VPC link etc
+
+
+- need to create a lambda to update the db and read the sns topic
+
+### The Sidecar pattern 
+- need to create a lambda to subscribe to the sns event topic and update the db
+- sidecar pattern: a secondary container is deployed alongside the main container for added functionality
+  - normally the sidecar performs cross-cutting concerns (logging, monitoring, security etc)
+  - the sidecar and main container share the state - filestorage, db, cache etc
+  - extends functionallty of a system (i.e. microservice, monolith) without changing the code of the system, reducing the risk of breaking it 
+
+- tbh don't get how this is a sidecar, we've used this before and it wasnt called a sidecar.
+
+- in "ReviewBooking-Sidecar" folder 
+
+---
+
+## Logging for Microservices
+
 
 ---
 
