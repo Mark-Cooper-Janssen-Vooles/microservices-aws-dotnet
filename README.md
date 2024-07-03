@@ -1,5 +1,7 @@
 # Building Microservices-based Systems in AWS with .NET and C# 
 
+Miro link to architecture diagram: https://miro.com/app/board/uXjVK2b3cDI=/?share_link_id=716309992364 
+
 - 92% of enterprises uses public cloud (aws, azure etc)
 - AWS has the largest market share (9%)
 - 75% of companies were using or planning to use event-driven architecture 
@@ -48,6 +50,7 @@ Contents:
 - [The Event Sourcing Pattern for Ultimate System Resiliancy (hotel booking!)](#the-event-sourcing-pattern-for-ultimate-system-resiliancy)
   - [Event Sourcing microservice](#event-sourcing-microservice)
   - [booking microservice](#booking-microservice)
+  - [Creating the review booking microservice](#creating-the-review-booking-microservice)
 
 
 ---
@@ -1132,6 +1135,13 @@ app.MapGet("/search", async (string? city, int? rating) =>
 - create an authoriser 
 
 ### View and Confirm Hotel Bookings
+- go to search page and, search and click book hotel - then go to bookings page where you can confirm or cancel
+- search page uses the query api 
+- booking / filling form uses the command api 
+- bookings page uses query api (with param of booking set to draft)
+
+### Creating the review booking microservice
+- bookingReview (in folders) 
 - 
 
 ---
