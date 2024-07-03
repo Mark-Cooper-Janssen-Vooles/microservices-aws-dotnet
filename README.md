@@ -54,6 +54,8 @@ Contents:
   - [The Sidecar Pattern](#the-sidecar-pattern)
 - [Logging for Microservices](#logging-for-microservices)
   - [Logging Solutions in AWS](#logging-solutions-in-aws)
+- [The Saga Pattern](#the-saga-pattern)
+  - 
 
 
 ---
@@ -1203,9 +1205,46 @@ options for shipping logs to the log storage
   - Kinesis is a large pipe we can put data through 
   - example of this would be the cloudwatch logs push to the Amazon Kinesis Data Streams => a lambda processes these into Kinesis Data Firehose => pushed to amazon OpenSearch Service => goes through amazon cognito => visualised in Kibana 
 
+![alt text](image.png)
+
 ### AWS Cloudwatch
-- 
-  
+- you can create a log group in Cloudwatch - one log group can have many log streams, and one log stream will have many entries
+- retention is set by default to never expire in a log group ($$$$)
+
+
+### Setting up AWS Cognito Identity pool for Kibana
+- we have a cognito user pool set up, but these are for users of the website. we want one for the employees (software devs)
+- make a new one, then we can manually add a user
+- go to root of AWS Cognito - select that it needs access to AWS Services - need to create an identity pool and add that to the initial user pool. 
+- it will have an auth role we need to take note of 
+
+- in aws s3 we need to make a bucket, "log backup" 
+
+### Creating ELK Stack with AWS OpenSearch
+- in OpenSearch create a domain (this represents an instance of the openSearch db)
+- create a domain, theres both a domain url and a kibana URL 
+- click enable amazon cognito authentication and choose the correct pools
+- set the access policy in IAM, update the access policy to allow for the ARN of the cognito identity pool
+- now when we open the Kibana URL it allows us to sign in using cognito
+- once you login you see the UI of kibana (as soon as we push logs from cloudwatch to elastic search we'll see them here)
+
+### Shipping logs from AWS Cloudwatch to ELK (elastic search and kibana)
+- simple way and complex way
+- simple way: 
+  - go to cloudwatch, choose log group, in actions go 'subscription filters' => "open search subscription service"
+  - we need to create a lambda through here, assign IAM role of open search
+  - role name " cloudwatch to elastic search execution role"
+  - use log format as JSON (elastic search understands this)
+  - click start streaming (only starts adding logs to elastic search when this is activated)
+  - now in Kibana can see the logs coming in 
+    - we can set up Index patterns here, like how logs were named as they came in etc
+  - kibana looking like sumolog at this point 
+- complex way
+  - the above will work for nearly all apps, if you have a huge amount of services etc may want to use kinesis 
+
+---
+
+## The Saga Pattern
 
 ---
 
