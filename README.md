@@ -56,6 +56,7 @@ Contents:
   - [Logging Solutions in AWS](#logging-solutions-in-aws)
 - [The Saga Pattern](#the-saga-pattern)
   - [Why message-oriented architecture?](#why-message-oriented-architecture)
+- [Event Streaming Platforms: Apache Kafka, AWS MSK](#event-streaming-platforms-apache-kafka-aws-msk)
 
 
 ---
@@ -1267,6 +1268,73 @@ options for shipping logs to the log storage
   - examples: integration between heterogeneous systems (i.e. different domains), task queues, notification systems 
 
 ### Why message-oriented Architecture?
+- used for implementing business workflows 
+  - buying a plane ticket 
+  - buy an internet plan with a modem
+- patterns of workflow management
+  - Choreography Pattern
+    - no central workflow management component 
+    - microservices react to their input events as they arrive
+    - microservices independent of upstream event producers or downstream consumers
+    - microservices must handle failure and rollbacks themselves
+  - Orchestration Pattern 
+    - a central system encapsulates the workflow and handles the messages
+    - the workflow orchestrator handles rollbacks
+
+### Deep dirve into Choreography pattern
+- i.e. Service A -> Event Stream 1 -> Service B -> Event Stream 2 -> Service C -> Output stream 
+- problem scenarios:
+  - if we need to make a change to service C now needs to operate before service B - we need to change both streams (not compatible with open/closed principle)
+  - if service C fails to complete so it wants to rollback the workflow. because there is no centralised management system if it wants to rollback it needs to have another "event stream 3" which is just for rollback, then service B listens to that, then it sends another rollback to Event stream 4, and service A has to listen to that etc.. code needs to be able to handle the rollback etc also.
+- choreography pattern is simple to start with but as workflow gets more and more complicated it becomes a nightmare 
+
+### Deep dive into Orchestration pattern
+- A central microservice, the orchestrator, issues commands to subordinate worker microservices.
+- the orchestrator awaits responses after issuing commands
+- microservice => input stream => "orchestrator" microservice => message 1 => message broker 1 => service A 
+  - service A => response 1 => message broker 1 => response 1=> orchestrator 
+- message 2 going to message broker 2 also talks to the orchestrator in the same way. 
+- attributes:
+  - orchestrator handles the rollbacks (i.e. the response can be an error response)
+  - learning the workflow is easier (its documented by the orchestrator microservice)
+  - complexity increases exponentially as workflow grows within orchestrator microservice
+
+- another way of implementing orchestrator pattern is "request/response pattern" which is synchronous 
+- microservice => input stream => "orchestrator microservice" => request => service A
+  - service A => response => "orchestrator microservice"
+- because is it syncronous, it awaits the response from a rest API. it makes a syncoronous API call and gets a response.
+- attributes:
+  - generally faster
+  - orchestrator must handle intermittent connectivitiy issues
+
+### Choreography vs Orchestration
+- Choreography pattern:
+  - response time's growth is somewhat linear
+  - complexity (making changes, learning the system etc) increases exponentially
+  - code needed to know when workflow is finished 
+
+- Orchestration
+  - response time's growth is somewhat exponential 
+
+- Hybrid pattern
+  - try to maximise benefits and minimise downsides
+  - i.e. within Order Domain theres an orchestrator, and within Payment domain theres an orchestrator
+    - but if these two domains communicate with each other, we use choreography (i.e. event streaming or message broker)
+
+---
+
+## Event Streaming Platforms: Apache Kafka, AWS MSK
+- most common platform is kafka (very popular in java world) - scalable
+- newrelic uses kafka 
+- kafka.apache.org 
+- in AWS is used as a managed service: Amazon MSK 
+
+- Amazon Kinesis is another one 
+  - managed by AWS, good for video streaming and log collection
+  - data streaming
+  - comes with Kinesis Firehose for sending data to other destinations
+
+### What problem does event streaming solve? 
 
 ---
 
