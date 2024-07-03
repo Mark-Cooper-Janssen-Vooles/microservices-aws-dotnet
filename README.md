@@ -53,6 +53,7 @@ Contents:
   - [Creating the review booking microservice](#creating-the-review-booking-microservice)
   - [The Sidecar Pattern](#the-sidecar-pattern)
 - [Logging for Microservices](#logging-for-microservices)
+  - [Logging Solutions in AWS](#logging-solutions-in-aws)
 
 
 ---
@@ -1172,7 +1173,39 @@ app.MapGet("/search", async (string? city, int? rating) =>
 ---
 
 ## Logging for Microservices
+- we use logging, monitoring and tracing to identify errors, find edge-case problems and performance bottlenecks
+  - Logs represent an Event, i.e. an error in the microservice or its infrastructure 
+    - types of logging:
+      - application logs: produced by code. e.g. error logged via "context" in a lambda
+      - infrastructure logs: i.e API Gateway logs, such logs are in CloudWatch
+      - Security logs - collected by AWS Cloud Trail
+      - Change and audit logs - AWS Cloud Trail 
+    - Centralized Logging 
+      - if you have service A logs, service B logs, API Gateway logs and ECS logs for example are in seperate log groups, might be in seperate aws accounts etc
+      - recommended that we store all these logs into one "Log Storage" - it aids:
+        - searching for logs
+        - analytics
+        - alarms 
+        - security anomalies
+  - Monitoring is based on Telemetry data: Data that is collected from a running software in a Production environment 
+  - Tracing shows the path of a request through the system  
 
+### Logging Solutions in AWS 
+options for centralized log storage
+- ELK Stack: Elasticsearch and Kibana (uses elastic search and the UI of Kibana)
+  - https://aws.amazon.com/what-is/elk-stack/
+- Commercial products: Splunk, Datadog etc (more advanced, cost more)
+
+options for shipping logs to the log storage
+- quick but not sophisticated: ship directly from AWS CloudWatch to Log Database (i.e. ELK)
+  - i.e. lambda and ecs both send to cloudwatch => sends to elasticsearch db => visualised in kibana
+- sophisticated but expensive: Stream logs through Kinesis to the Log Database (i.e. ELK)
+  - Kinesis is a large pipe we can put data through 
+  - example of this would be the cloudwatch logs push to the Amazon Kinesis Data Streams => a lambda processes these into Kinesis Data Firehose => pushed to amazon OpenSearch Service => goes through amazon cognito => visualised in Kibana 
+
+### AWS Cloudwatch
+- 
+  
 
 ---
 
