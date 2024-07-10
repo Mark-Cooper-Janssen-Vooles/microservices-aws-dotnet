@@ -64,6 +64,8 @@ Contents:
   - [Whats the Anatomy of a microservice-based system](#whats-the-anatomy-of-a-microservice-based-system)
   - [Explain the Monolithic, SOA and Microservices Architectures](#explain-the-monolithic-soa-and-microservices-architectures)
   - [What is Bounded Context?](#what-is-bounded-context)
+  - [Explain the Circuit Breaker Pattern](#explain-the-circuit-breaker-pattern)
+  - [Explain the CQRS Pattern](#explain-the-cqrs-pattern)
 
 ---
 
@@ -1420,6 +1422,17 @@ options for shipping logs to the log storage
 - a Domain Model is the representation of a real thing in the world i.e. Dron, User, Package
 - A bounded context is simply the boundary within a domain where a particular domain model applies 
 - normally one microservice represents one bounded context 
+
+### Explain the Circuit Breaker Pattern 
+- applies to API (point to point calls) - not async calls (events / messages)
+- we set a threshold for failing API calls i.e. 3
+- if failing API calls exceed the threshold we reject the API calls
+- circuit breakers are micro services themselves and act as Proxy 
+- circuit breakers can have 3 states: open, closed, half-open 
+- microservices can have circuit breakers built into them (i.e. in dotnet we use 'Polly')
+
+### Explain the CQRS Pattern
+- 
 
 ---
 
