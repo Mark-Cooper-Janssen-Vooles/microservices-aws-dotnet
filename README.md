@@ -66,6 +66,7 @@ Contents:
   - [What is Bounded Context?](#what-is-bounded-context)
   - [Explain the Circuit Breaker Pattern](#explain-the-circuit-breaker-pattern)
   - [Explain the CQRS Pattern](#explain-the-cqrs-pattern)
+  - [Explain the role of Containers in microservices](#explain-the-role-of-containers-in-microservices)
 
 ---
 
@@ -1432,7 +1433,16 @@ options for shipping logs to the log storage
 - microservices can have circuit breakers built into them (i.e. in dotnet we use 'Polly')
 
 ### Explain the CQRS Pattern
-- 
+- CQRS stands for command query responsibility segregation
+- every microservice has its own database - because of this it is not possible to run a SQL query across multiple tables in multiplle domains
+- to support querying, a microservice will maintain a view of the data it needs to execute the query
+- to keep the database up to date, the microservice subscrives to domain events (event streaming)
+
+### Explain the role of Containers in microservices
+- a container is a bundling of an app (i.e. microservice) and all its dependencies as a package, that allows it to be deployed easily and consistently regardless of environment 
+- for example a software that only runs on Linux and uses MySQL can be deployed to a windows server without having to install MySQL
+- containers use Vierutalisation features of the host operating system
+- containers allow us to deploy microservices to various environments. services can be built with different technologies but run side by side
 
 ---
 
