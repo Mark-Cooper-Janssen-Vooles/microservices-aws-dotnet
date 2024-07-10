@@ -61,6 +61,8 @@ Contents:
 - [Message Oriented Microservices with RabbitMQ](#message-oriented-microservices-with-rabbitmq)
 - Interview Questions
   - [Alternatives to Monolithic Applications](#alternatives-to-monolithic-applications)
+  - [Whats the Anatomy of a microservice-based system](#whats-the-anatomy-of-a-microservice-based-system)
+  - [Explain the Monolithic, SOA and Microservices Architectures](#explain-the-monolithic-soa-and-microservices-architectures)
 
 ---
 
@@ -1391,6 +1393,12 @@ options for shipping logs to the log storage
   - no shared databases - microservices must be independent
   - can mix and match tech stacks - a big benefit
 
+### Whats the Anatomy of a microservice-based system
+- System users => api gateway (public subnet) => (private subnet) load balancer => microservice => database
+- user => client-side website (react, public subnet) => (private subnet) private API Gateway => microservice => database 
+- microservice is subscribed to event streams / message bus to update the DB (and pay also publish to said event streams / message busses)
+
+### Explain the Monolithic, SOA and Microservices Architectures
 
 
 ---
