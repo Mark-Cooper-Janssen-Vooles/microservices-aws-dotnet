@@ -59,6 +59,8 @@ Contents:
 - [Event Streaming Platforms: Apache Kafka, AWS MSK](#event-streaming-platforms-apache-kafka-aws-msk)
   - [What problem does event streaming solve?](#what-problem-does-event-streaming-solve)
 - [Message Oriented Microservices with RabbitMQ](#message-oriented-microservices-with-rabbitmq)
+- Interview Questions
+  - [Alternatives to Monolithic Applications](#alternatives-to-monolithic-applications)
 
 ---
 
@@ -1362,6 +1364,35 @@ options for shipping logs to the log storage
 
 
 ---
-start the interview q's introduction
+
+## Interview Q's 
+
+### Alternatives to Monolithic Applications
+- single codebase monolith:
+  - 1 code base compiled into one single binary - i.e. EXE in windows 
+  - reusability is limited and only at class-level (for OOP)
+- component-based monolith:
+  - broken down to libraries, i.e. application made of multiple binary files (i.e. DLL files in Windows)
+  - All libraries run as part of a single process and app
+  - to make a change, can just deploy that library
+  - all libraries must run on one single service i.e. e-commerce App has payment and inventory (need to be run on the same process), if an error in inventory it kills the e-commerce app
+- Service-Oriented Architecture (SOA)
+  - app broken down to services
+  - services communicate via SOAP or Restful (HTTP) API's
+  - normally same tech stack is used to build all the services: i.e. dotnet
+  - because services talk via API, the coupling is high "point to point" connection
+  - everything is synchronous: when you make an API call you need to wait till the result comes
+  - services use a shared database
+- Microservices architecture
+  - services are independent and can be used in any project or application
+  - i.e. Email Sending Service - any other app may need to use it, but it can live independently
+  - SOAP api's are deprecated
+  - microservices can be called in an asynchronous manner (not just API but events and messages)
+  - no shared databases - microservices must be independent
+  - can mix and match tech stacks - a big benefit
+
+
+
+---
 
 ongoing miro board: https://miro.com/app/board/uXjVKCa1QSc=/
