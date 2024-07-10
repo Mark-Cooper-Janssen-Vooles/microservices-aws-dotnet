@@ -63,6 +63,7 @@ Contents:
   - [Alternatives to Monolithic Applications](#alternatives-to-monolithic-applications)
   - [Whats the Anatomy of a microservice-based system](#whats-the-anatomy-of-a-microservice-based-system)
   - [Explain the Monolithic, SOA and Microservices Architectures](#explain-the-monolithic-soa-and-microservices-architectures)
+  - [What is Bounded Context?](#what-is-bounded-context)
 
 ---
 
@@ -1399,7 +1400,22 @@ options for shipping logs to the log storage
 - microservice is subscribed to event streams / message bus to update the DB (and pay also publish to said event streams / message busses)
 
 ### Explain the Monolithic, SOA and Microservices Architectures
+- Monolith: 
+  - Application made of a single code base
+  - app runs as a single process and entire code shares the same memory
+  - functions in the code share the same codebase
+- Service Oriented Architecture (SOA):
+  - Tries to break down monolith app to smaller components
+  - Services communicate via Synchronous API calls (SOAP or REST)
+  - often services share the same db although not a best practice
+- Microservice:
+  - services are smaller and finer grained compared to SOA
+  - microservices communicate via REST apis, events and messages 
+  - each domain has its own DB
 
+### What is Bounded Context?
+- A concept in Domain Driven Design (DDD)
+- 
 
 ---
 
