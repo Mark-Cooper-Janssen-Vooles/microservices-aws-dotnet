@@ -1415,7 +1415,11 @@ options for shipping logs to the log storage
 
 ### What is Bounded Context?
 - A concept in Domain Driven Design (DDD)
-- 
+- DDD is a framework of analysing and modelling large problems, models, and teams 
+- The entire problem is a Domain i.e. Drone Delivery System
+- a Domain Model is the representation of a real thing in the world i.e. Dron, User, Package
+- A bounded context is simply the boundary within a domain where a particular domain model applies 
+- normally one microservice represents one bounded context 
 
 ---
 
