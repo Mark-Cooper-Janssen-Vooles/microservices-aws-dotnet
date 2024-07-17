@@ -1,6 +1,9 @@
 # Building Microservices-based Systems in AWS with .NET and C# 
 
-Miro link to architecture diagram: https://miro.com/app/board/uXjVK2b3cDI=/?share_link_id=716309992364 
+Miro link to architecture diagram: https://miro.com/app/board/uXjVKCa1QSc=/
+
+![Admin and search domain](image-2.png)
+![alt text](image-4.png)
 
 - 92% of enterprises uses public cloud (aws, azure etc)
 - AWS has the largest market share (9%)
